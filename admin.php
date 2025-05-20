@@ -400,24 +400,26 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             align-items: flex-start;
             background: #fff;
             border-radius: 18px;
-            box-shadow: 0 4px 18px rgba(67,97,238,0.08);
-            padding: 2rem 1.5rem 1.3rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
+            border: 1.5px solid #f0f1f6;
+            padding: 2.1rem 1.6rem 1.3rem 1.6rem;
             position: relative;
-            transition: box-shadow 0.2s, transform 0.2s;
+            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
             min-height: 160px;
         }
         .dashboard-card:hover {
-            box-shadow: 0 8px 32px rgba(67,97,238,0.13);
-            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
+            border: 1.5px solid var(--primary-color);
+            transform: translateY(-2px) scale(1.015);
         }
         .dashboard-card .icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             margin-bottom: 1.1rem;
             background: #f2f6fc;
             color: var(--primary-color);
@@ -425,21 +427,21 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         .dashboard-card .card-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.08rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: #23283e;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
         }
         .dashboard-card .card-number {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             font-weight: 800;
             color: var(--primary-color);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
         }
         .dashboard-card .badge {
-            font-size: 0.93rem;
+            font-size: 0.92rem;
             border-radius: 7px;
-            padding: 0.32em 0.8em;
+            padding: 0.28em 0.7em;
             font-weight: 500;
             background: #f2f6fc;
             color: var(--primary-color);
@@ -453,13 +455,50 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             color: #2274e0;
             background: #e9f4ff;
         }
+        /* Tools Management Section */
+        .tools-table th, .tools-table td {
+            border: none;
+            padding: 1.05rem 1.1rem;
+            vertical-align: middle;
+        }
+        .tools-table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.03rem;
+        }
+        .tools-table tbody tr {
+            background: #fff;
+            border-radius: 12px;
+        }
+        .tools-table tbody tr:hover {
+            background: #f2f6fc;
+        }
+        .tools-table .badge {
+            font-size: 0.92rem;
+            border-radius: 7px;
+            padding: 0.28em 0.7em;
+            font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .tools-table .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .tools-table .badge.text-danger {
+            color: #c0392b;
+            background: #ffeaea;
+        }
+        .tools-table .btn {
+            border-radius: 999px !important;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
         @media (max-width: 767.98px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
             .dashboard-card {
-                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+                padding: 1rem 0.6rem 0.6rem 0.6rem;
             }
         }
     </style>
@@ -684,6 +723,61 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <!-- Tools Management Section -->
+                <div class="section-header"><i class="bi bi-wrench"></i> Tools Management</div>
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Manage Tools</h5>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Tool
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table tools-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Tool Name</th>
+                                        <th>Status</th>
+                                        <th>Users</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tool Alpha</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>87</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tool Beta</td>
+                                        <td><span class="badge text-danger">Inactive</span></td>
+                                        <td>34</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tool Gamma</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>120</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </main>
