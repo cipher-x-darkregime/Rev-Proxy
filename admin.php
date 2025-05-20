@@ -1066,10 +1066,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         </div>
     </div>
 
-    <button class="floating-add-btn" title="Add New">
-        <i class="bi bi-plus-lg"></i>
-    </button>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Sidebar collapse/expand functionality
