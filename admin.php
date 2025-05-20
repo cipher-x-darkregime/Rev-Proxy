@@ -56,8 +56,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
             --success-color: #4cc9f0;
             --info-color: #4895ef;
             --warning-color: #f72585;
@@ -65,9 +65,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             --light-color: #f8f9fa;
             --sidebar-width: 270px;
             --sidebar-collapsed-width: 72px;
-            --glass-bg: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --glass-bg: rgba(30, 34, 45, 0.72);
             --glass-blur: 18px;
-            --accent-bar: linear-gradient(180deg, #fff 0%, #4cc9f0 100%);
+            --accent-bar: linear-gradient(180deg, #4361ee 0%, #4cc9f0 100%);
         }
 
         body {
@@ -130,7 +130,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             letter-spacing: 0.5px;
         }
         .sidebar .nav-link.active, .sidebar .nav-link:hover {
-            background: rgba(255,255,255,0.10);
+            background: rgba(67,97,238,0.18);
             color: #fff;
             box-shadow: 0 4px 16px 0 rgba(67,97,238,0.13);
         }
