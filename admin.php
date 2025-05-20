@@ -951,6 +951,29 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .dashboard-section.active, .tools-section.active, .servers-section.active, .users-section.active {
             display: block;
         }
+        .sidebar-logout {
+            width: 100%;
+            padding: 1.5rem 1rem 1.5rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+        .sidebar-logout .btn-logout {
+            width: 100%;
+            background: #ff3b3b;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.08rem;
+            border-radius: 12px;
+            border: none;
+            padding: 0.9rem 0;
+            box-shadow: 0 2px 8px rgba(255,59,59,0.08);
+            transition: background 0.18s, box-shadow 0.18s;
+        }
+        .sidebar-logout .btn-logout:hover {
+            background: #d90429;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(255,59,59,0.18);
+        }
     </style>
 </head>
 <body>
@@ -970,15 +993,15 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#servers">
-                        <i class="bi bi-hdd-stack"></i>
-                        Servers
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#tools">
                         <i class="bi bi-tools"></i>
                         Tools
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#servers">
+                        <i class="bi bi-hdd-stack"></i>
+                        Servers
                     </a>
                 </li>
                 <li class="nav-item">
@@ -1000,21 +1023,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </a>
                 </li>
             </ul>
-            <div class="sidebar-profile p-3 border-top mt-3">
-                <div class="dropdown">
-                    <button class="btn btn-link text-white d-flex align-items-center w-100 p-0 dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
-                        <span class="status-dot"></span>
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="36" height="36">
-                        <span class="me-2">Admin</span>
-                        <i class="bi bi-chevron-up ms-auto"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-dark w-100">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                    </ul>
-                </div>
+            <div class="sidebar-logout">
+                <a href="logout.php" class="btn btn-logout text-center">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </a>
             </div>
         </div>
     </nav>
