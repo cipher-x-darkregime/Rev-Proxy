@@ -1118,20 +1118,22 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             </button>
                         </div>
                         <form class="filter-bar" id="tools-filter">
-                            <input type="text" placeholder="Tool Name" data-filter-col="0">
-                            <select data-filter-col="1">
+                            <input type="text" placeholder="Tool ID" data-filter-col="0">
+                            <input type="text" placeholder="Tool Name" data-filter-col="1">
+                            <select data-filter-col="2">
                                 <option value="">Status</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
-                            <input type="number" placeholder="Servers" data-filter-col="2" min="0">
-                            <input type="number" placeholder="Users" data-filter-col="3" min="0">
+                            <input type="number" placeholder="Servers" data-filter-col="3" min="0">
+                            <input type="number" placeholder="Users" data-filter-col="4" min="0">
                             <button type="reset" class="btn btn-outline-secondary">Clear</button>
                         </form>
                         <div class="server-table-responsive">
                             <table class="table server-table align-middle" id="tools-table">
                                 <thead>
                                     <tr>
+                                        <th>Tool ID</th>
                                         <th>Tool Name</th>
                                         <th>Status</th>
                                         <th>Servers</th>
@@ -1141,6 +1143,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>1</td>
                                         <td>Tool Alpha</td>
                                         <td><span class="badge text-success">Active</span></td>
                                         <td>3</td>
@@ -1152,6 +1155,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>2</td>
                                         <td>Tool Beta</td>
                                         <td><span class="badge text-danger">Inactive</span></td>
                                         <td>1</td>
@@ -1163,6 +1167,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>3</td>
                                         <td>Tool Gamma</td>
                                         <td><span class="badge text-success">Active</span></td>
                                         <td>5</td>
