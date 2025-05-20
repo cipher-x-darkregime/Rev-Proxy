@@ -717,9 +717,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             transition: box-shadow 0.25s, border-radius 0.25s, padding 0.25s, margin 0.35s, width 0.35s;
         }
         body.sidebar-collapsed .main-floating-card {
-            margin-left: 1vw;
-            margin-right: 1vw;
-            width: auto;
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
         }
         .section-header {
             display: flex;
