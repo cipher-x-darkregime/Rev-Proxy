@@ -61,12 +61,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             --success-color: #4cc9f0;
             --info-color: #4895ef;
             --warning-color: #f72585;
-            --dark-color: #1a1b1e;
+            --dark-color: #181a20;
             --light-color: #f8f9fa;
-            --sidebar-width: 250px;
-            --header-height: 0px;
-            --glass-bg: rgba(30, 34, 45, 0.7);
-            --glass-blur: 16px;
+            --sidebar-width: 270px;
+            --sidebar-collapsed-width: 72px;
+            --glass-bg: rgba(30, 34, 45, 0.72);
+            --glass-blur: 18px;
+            --accent-bar: linear-gradient(180deg, #4361ee 0%, #4cc9f0 100%);
         }
 
         body {
@@ -81,36 +82,57 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             bottom: 0;
             left: 0;
             z-index: 100;
-            padding: 0;
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--glass-bg);
-            box-shadow: 0 0 30px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
             backdrop-filter: blur(var(--glass-blur));
-            border-right: 1.5px solid rgba(255,255,255,0.08);
-            transition: width 0.3s;
+            border-right: 2px solid rgba(255,255,255,0.08);
+            transition: width 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden;
         }
         .sidebar-collapsed {
-            width: 70px !important;
+            width: var(--sidebar-collapsed-width) !important;
         }
-        .sidebar .nav-link {
-            color: rgba(255,255,255,.85);
-            padding: 14px 24px;
-            margin: 6px 0;
-            border-radius: 10px;
-            font-size: 1.08rem;
+        .sidebar .sidebar-toggle {
             display: flex;
             align-items: center;
-            transition: all 0.2s;
+            justify-content: flex-end;
+            padding: 18px 18px 0 0;
+        }
+        .sidebar .sidebar-toggle-btn {
+            background: rgba(255,255,255,0.12);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.5rem;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sidebar .sidebar-toggle-btn:hover {
+            background: var(--primary-color);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,.88);
+            padding: 16px 28px;
+            margin: 10px 0;
+            border-radius: 14px;
+            font-size: 1.13rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.22s cubic-bezier(.4,2,.6,1);
             position: relative;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         .sidebar .nav-link.active, .sidebar .nav-link:hover {
             background: rgba(67,97,238,0.18);
             color: #fff;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.08);
+            box-shadow: 0 4px 16px 0 rgba(67,97,238,0.13);
         }
         .sidebar .nav-link.active::before {
             content: '';
@@ -118,13 +140,23 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             left: 0;
             top: 10px;
             bottom: 10px;
-            width: 4px;
-            border-radius: 4px;
-            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            width: 6px;
+            border-radius: 6px;
+            background: var(--accent-bar);
+            box-shadow: 0 0 8px 2px #4cc9f0;
+            animation: glow 1.2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 8px 2px #4cc9f0; }
+            to { box-shadow: 0 0 16px 4px #4361ee; }
         }
         .sidebar .nav-link i {
-            font-size: 1.3rem;
-            margin-right: 16px;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            transition: transform 0.18s;
+        }
+        .sidebar .nav-link:hover i {
+            transform: scale(1.18);
         }
         .sidebar-collapsed .nav-link span {
             display: none;
@@ -136,32 +168,34 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             margin-right: 0 !important;
         }
         .sidebar-profile {
-            background: rgba(255,255,255,0.07);
-            border-radius: 12px;
-            margin: 18px 12px 12px 12px;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.04);
+            background: rgba(255,255,255,0.10);
+            border-radius: 16px;
+            margin: 22px 16px 16px 16px;
+            box-shadow: 0 2px 12px rgba(67,97,238,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 18px 0 10px 0;
         }
         .sidebar-profile .dropdown-toggle {
             color: #fff;
         }
         .sidebar-profile img {
-            border: 2px solid var(--primary-color);
-            margin-right: 10px;
+            border: 2.5px solid var(--primary-color);
+            margin-right: 12px;
         }
         .sidebar-profile .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: #4cc9f0;
             border-radius: 50%;
             display: inline-block;
-            margin-right: 6px;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #4cc9f0;
         }
         .sidebar-profile .dropdown-menu {
             background: #23242b;
-            border-radius: 10px;
+            border-radius: 12px;
             border: none;
         }
         .sidebar-profile .dropdown-item {
@@ -226,11 +260,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         @media (max-width: 991.98px) {
             .sidebar {
-                width: 70px !important;
+                width: var(--sidebar-collapsed-width) !important;
             }
             .main-content {
-                margin-left: 70px;
-                width: calc(100vw - 70px);
+                margin-left: var(--sidebar-collapsed-width);
+                width: calc(100vw - var(--sidebar-collapsed-width));
                 padding: 1rem;
             }
         }
@@ -239,6 +273,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 <body>
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
+        <div class="sidebar-toggle">
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle Sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
         <div class="sidebar-sticky d-flex flex-column justify-content-between h-100">
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -509,5 +548,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     </button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar collapse/expand functionality
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggleBtn');
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('sidebar-collapsed');
+        });
+    </script>
 </body>
 </html> 
