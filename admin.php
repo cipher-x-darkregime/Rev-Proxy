@@ -56,23 +56,23 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #00c6fb;
-            --secondary-color: #005bea;
-            --success-color: #00e6d3;
-            --info-color: #7f53ac;
-            --warning-color: #ff5e62;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --info-color: #4895ef;
+            --warning-color: #f72585;
             --dark-color: #181a20;
-            --light-color: #f6f8fc;
+            --light-color: #f8f9fa;
             --sidebar-width: 270px;
             --sidebar-collapsed-width: 72px;
-            --glass-bg: linear-gradient(135deg, #00c6fb 0%, #005bea 60%, #7f53ac 100%);
+            --glass-bg: rgba(30, 34, 45, 0.72);
             --glass-blur: 18px;
-            --accent-bar: linear-gradient(180deg, #ff5e62 0%, #00e6d3 100%);
+            --accent-bar: linear-gradient(180deg, #4361ee 0%, #4cc9f0 100%);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f6f8fc 0%, #e9eafc 100%);
+            background: linear-gradient(135deg, #f4f6f9 0%, #e9eafc 100%);
             padding-top: 0;
         }
 
@@ -85,9 +85,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--glass-bg);
-            box-shadow: 0 8px 32px 0 rgba(0, 198, 251, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
             backdrop-filter: blur(var(--glass-blur));
-            border-right: 2px solid rgba(255,255,255,0.10);
+            border-right: 2px solid rgba(255,255,255,0.08);
             transition: width 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
             display: flex;
             flex-direction: column;
@@ -130,9 +130,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             letter-spacing: 0.5px;
         }
         .sidebar .nav-link.active, .sidebar .nav-link:hover {
-            background: rgba(255,94,98,0.18);
+            background: rgba(67,97,238,0.18);
             color: #fff;
-            box-shadow: 0 4px 16px 0 rgba(0,198,251,0.13);
+            box-shadow: 0 4px 16px 0 rgba(67,97,238,0.13);
         }
         .sidebar .nav-link.active::before {
             content: '';
@@ -143,12 +143,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             width: 6px;
             border-radius: 6px;
             background: var(--accent-bar);
-            box-shadow: 0 0 12px 2px #00e6d3;
+            box-shadow: 0 0 8px 2px #4cc9f0;
             animation: glow 1.2s infinite alternate;
         }
         @keyframes glow {
-            from { box-shadow: 0 0 12px 2px #00e6d3; }
-            to { box-shadow: 0 0 20px 6px #ff5e62; }
+            from { box-shadow: 0 0 8px 2px #4cc9f0; }
+            to { box-shadow: 0 0 16px 4px #4361ee; }
         }
         .sidebar .nav-link i {
             font-size: 1.5rem;
@@ -168,10 +168,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             margin-right: 0 !important;
         }
         .sidebar-profile {
-            background: rgba(255,255,255,0.13);
+            background: rgba(255,255,255,0.10);
             border-radius: 16px;
             margin: 22px 16px 16px 16px;
-            box-shadow: 0 2px 16px rgba(0,198,251,0.10);
+            box-shadow: 0 2px 12px rgba(67,97,238,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -181,17 +181,17 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             color: #fff;
         }
         .sidebar-profile img {
-            border: 2.5px solid var(--warning-color);
+            border: 2.5px solid var(--primary-color);
             margin-right: 12px;
         }
         .sidebar-profile .status-dot {
             width: 12px;
             height: 12px;
-            background: #00e6d3;
+            background: #4cc9f0;
             border-radius: 50%;
             display: inline-block;
             margin-right: 8px;
-            box-shadow: 0 0 8px #00e6d3;
+            box-shadow: 0 0 8px #4cc9f0;
         }
         .sidebar-profile .dropdown-menu {
             background: #23242b;
@@ -204,7 +204,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             transition: background 0.2s;
         }
         .sidebar-profile .dropdown-item:hover {
-            background: var(--warning-color);
+            background: var(--primary-color);
         }
         .main-content {
             width: calc(100vw - var(--sidebar-width));
@@ -213,7 +213,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             transition: all 0.3s ease;
             min-height: 100vh;
             margin-top: 0;
-            background: var(--light-color);
+            background: transparent;
             overflow: visible;
         }
         .card, .stat-card {
@@ -267,33 +267,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 width: calc(100vw - var(--sidebar-collapsed-width));
                 padding: 1rem;
             }
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, #00c6fb, #005bea);
-            border: none;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #ff5e62, #00e6d3);
-        }
-        .btn-danger {
-            background: linear-gradient(90deg, #ff5e62, #ff9966);
-            border: none;
-        }
-        .btn-danger:hover {
-            background: linear-gradient(90deg, #ff9966, #ff5e62);
-        }
-        .badge {
-            background: linear-gradient(90deg, #00e6d3, #00c6fb);
-            color: #181a20;
-        }
-        .stat-card.bg-primary {
-            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
-        }
-        .stat-card.bg-success {
-            background: linear-gradient(135deg, #00e6d3 0%, #7f53ac 100%);
-        }
-        .stat-card.bg-info {
-            background: linear-gradient(135deg, #7f53ac 0%, #00c6fb 100%);
         }
     </style>
 </head>
