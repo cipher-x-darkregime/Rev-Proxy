@@ -230,27 +230,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             font-size: 1.35rem;
             font-weight: 700;
             color: #23283e;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1.7rem;
             letter-spacing: 0.5px;
-            padding-left: 0.5rem;
-            position: relative;
-        }
-        .section-header::before {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 0;
-            top: 0.2rem;
-            width: 5px;
-            height: 2.1rem;
-            border-radius: 6px;
-            background: var(--primary-color);
-        }
-        .section-subtitle {
-            color: #6c7a99;
-            font-size: 1.01rem;
-            margin-bottom: 1.3rem;
-            margin-left: 0.5rem;
         }
         .section-header i {
             font-size: 1.7rem;
@@ -530,8 +511,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         /* Management Section Cards */
         .mgmt-card {
             background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 4px 18px rgba(67,97,238,0.07);
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
             border: 1.5px solid #f0f1f6;
             margin-bottom: 0;
             padding: 0;
@@ -546,7 +527,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .mgmt-card .card-header {
             background: transparent;
             border-bottom: none;
-            border-radius: 20px 20px 0 0 !important;
+            border-radius: 18px 18px 0 0 !important;
             padding: 1.1rem 2rem 0.5rem 2rem;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
@@ -557,30 +538,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             justify-content: flex-end;
         }
         .mgmt-card .card-header .btn, .mgmt-card .card-header .btn-group .btn {
-            font-size: 1.05rem;
-            padding: 0.5rem 1.3rem;
-            border-radius: 999px;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.07);
-        }
-        .mgmt-card .card-header .btn-primary {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            border: none;
-        }
-        .mgmt-card .card-header .btn-primary:hover {
-            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-        }
-        .mgmt-card .card-header .btn-outline-primary {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            background: #fff;
-        }
-        .mgmt-card .card-header .btn-outline-primary:hover {
-            background: var(--primary-color);
-            color: #fff;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
         }
         .mgmt-card .card-body {
-            padding: 1.5rem 2rem 1.7rem 2rem;
+            padding: 1.3rem 2rem 1.5rem 2rem;
         }
         .mgmt-table th, .mgmt-table td {
             border: none;
@@ -596,13 +558,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .mgmt-table tbody tr {
             background: #fff;
             border-radius: 12px;
-            transition: background 0.18s;
-        }
-        .mgmt-table tbody tr:nth-of-type(odd) {
-            background: #f8fafc;
         }
         .mgmt-table tbody tr:hover {
-            background: #e9f4ff;
+            background: #f2f6fc;
         }
         .mgmt-table .badge {
             font-size: 0.92rem;
@@ -623,65 +581,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         .mgmt-table .btn {
             border-radius: 999px !important;
-            font-size: 1.05rem;
-            padding: 0.45rem 1.2rem;
-            margin-right: 0.3rem;
-        }
-        .mgmt-table .btn:last-child {
-            margin-right: 0;
-        }
-        .mgmt-table .btn-info {
-            background: var(--info-color);
-            color: #fff;
-            border: none;
-        }
-        .mgmt-table .btn-info:hover {
-            background: #2274e0;
-        }
-        .mgmt-table .btn-danger {
-            background: var(--warning-color);
-            color: #fff;
-            border: none;
-        }
-        .mgmt-table .btn-danger:hover {
-            background: #d90429;
-        }
-        .mgmt-table .btn[title] {
-            position: relative;
-        }
-        .mgmt-table .btn[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            left: 50%;
-            top: -2.2rem;
-            transform: translateX(-50%);
-            background: #23283e;
-            color: #fff;
-            padding: 0.25rem 0.7rem;
-            border-radius: 6px;
-            font-size: 0.92rem;
-            white-space: nowrap;
-            z-index: 10;
-        }
-        .mgmt-card .form-label {
-            font-weight: 600;
-            color: #23283e;
-        }
-        .mgmt-card textarea.form-control {
-            border-radius: 12px;
-            border: 1.5px solid #e0e3eb;
-            font-size: 1.05rem;
-            padding: 1rem;
-            background: #f8fafc;
-        }
-        .mgmt-card textarea.form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.15rem rgba(67, 97, 238, 0.10);
-        }
-        .mgmt-card .d-flex.justify-content-between.align-items-center {
-            margin-top: 1.2rem;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
         }
         @media (max-width: 767.98px) {
+            .section-block {
+                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+            }
             .mgmt-card .card-header, .mgmt-card .card-body {
                 padding: 1rem 0.7rem 1rem 0.7rem;
             }
@@ -800,7 +706,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <!-- Server Management Section -->
                 <div class="section-block">
                     <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                    <div class="section-subtitle">Monitor and manage your active servers.</div>
                     <div class="mgmt-card mb-4">
                         <div class="card-header d-flex justify-content-end align-items-center">
                             <button class="btn btn-primary btn-sm">
@@ -829,9 +734,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <td>150</td>
                                             <td>99.9%</td>
                                             <td>
-                                                <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                                <button class="btn btn-info btn-sm" title="Analytics"><i class="bi bi-graph-up"></i></button>
-                                                <button class="btn btn-danger btn-sm" title="Stop Server"><i class="bi bi-power"></i></button>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
@@ -841,9 +746,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <td>120</td>
                                             <td>99.8%</td>
                                             <td>
-                                                <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                                <button class="btn btn-info btn-sm" title="Analytics"><i class="bi bi-graph-up"></i></button>
-                                                <button class="btn btn-danger btn-sm" title="Stop Server"><i class="bi bi-power"></i></button>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -856,7 +761,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <!-- Cookie Management Section -->
                 <div class="section-block">
                     <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
-                    <div class="section-subtitle">Manage and update your system cookies securely.</div>
                     <div class="mgmt-card">
                         <div class="card-header d-flex justify-content-end align-items-center">
                             <div class="btn-group">
