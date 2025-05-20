@@ -118,6 +118,23 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             transition: all 0.3s ease;
             min-height: calc(100vh - var(--header-height));
             margin-top: var(--header-height);
+            background: transparent;
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                width: 100vw;
+                height: auto;
+                z-index: 1050;
+            }
+            .main-content {
+                margin-left: 0;
+                margin-top: calc(var(--header-height) + 60px);
+                padding: 1rem;
+            }
         }
 
         .stat-card {
