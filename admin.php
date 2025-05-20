@@ -1014,6 +1014,56 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         </div>
                     </div>
 
+                    <!-- Tool Management Section -->
+                    <div class="section-header-row">
+                        <div class="section-header"><i class="bi bi-tools"></i> Tool Management</div>
+                        <button class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Tool
+                        </button>
+                    </div>
+                    <div class="server-table-responsive">
+                        <table class="table server-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Tool Name</th>
+                                    <th>Status</th>
+                                    <th>Users</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tool Alpha</td>
+                                    <td><span class="badge text-success">Active</span></td>
+                                    <td>87</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tool Beta</td>
+                                    <td><span class="badge text-danger">Inactive</span></td>
+                                    <td>34</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tool Gamma</td>
+                                    <td><span class="badge text-success">Active</span></td>
+                                    <td>120</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <div class="section-header-row">
                         <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
                         <button class="btn btn-primary">
