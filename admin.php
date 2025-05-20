@@ -1227,9 +1227,21 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             }
         }
         // Dashboard management buttons
-        document.getElementById('dashboard-manage-tools').onclick = () => showSection('tools-management-section');
-        document.getElementById('dashboard-manage-servers').onclick = () => showSection('servers-management-section');
-        document.getElementById('dashboard-manage-users').onclick = () => showSection('users-management-section');
+        document.getElementById('dashboard-manage-tools').onclick = () => {
+            showSection('tools-management-section');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => { if (l.textContent.includes('Tools')) l.classList.add('active'); });
+        };
+        document.getElementById('dashboard-manage-servers').onclick = () => {
+            showSection('servers-management-section');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => { if (l.textContent.includes('Servers')) l.classList.add('active'); });
+        };
+        document.getElementById('dashboard-manage-users').onclick = () => {
+            showSection('users-management-section');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => { if (l.textContent.includes('Users')) l.classList.add('active'); });
+        };
         // Sidebar menu (example, you may need to update selectors to match your sidebar links)
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
