@@ -1032,12 +1032,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#analytics">
-                        <i class="bi bi-graph-up"></i>
-                        Analytics
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#settings">
                         <i class="bi bi-gear"></i>
                         Settings
