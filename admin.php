@@ -53,7 +53,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #4361ee;
@@ -65,11 +65,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             --light-color: #f8f9fa;
             --sidebar-width: 250px;
             --header-height: 0px;
+            --glass-bg: rgba(30, 34, 45, 0.7);
+            --glass-blur: 16px;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f4f6f9;
+            background: linear-gradient(135deg, #f4f6f9 0%, #e9eafc 100%);
             padding-top: 0;
         }
 
@@ -80,252 +82,163 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             left: 0;
             z-index: 100;
             padding: 0;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            background: linear-gradient(180deg, var(--dark-color) 0%, #2d2f34 100%);
             width: var(--sidebar-width);
-            transition: all 0.3s ease;
             height: 100vh;
+            background: var(--glass-bg);
+            box-shadow: 0 0 30px rgba(0,0,0,0.12);
+            backdrop-filter: blur(var(--glass-blur));
+            border-right: 1.5px solid rgba(255,255,255,0.08);
+            transition: width 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-
-        .sidebar-sticky {
+        .sidebar-collapsed {
+            width: 70px !important;
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,.85);
+            padding: 14px 24px;
+            margin: 6px 0;
+            border-radius: 10px;
+            font-size: 1.08rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
             position: relative;
-            height: 100%;
-            padding-top: 1rem;
-            overflow-x: hidden;
-            overflow-y: auto;
         }
-
-        .navbar {
-            box-shadow: 0 2px 15px rgba(0,0,0,.1);
-            background: white !important;
-            padding: 0.5rem 2rem;
-            height: var(--header-height);
-            position: fixed;
-            top: 0;
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(67,97,238,0.18);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.08);
+        }
+        .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
             left: 0;
-            right: 0;
-            z-index: 1000;
+            top: 10px;
+            bottom: 10px;
+            width: 4px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
         }
-
-        .navbar-brand {
-            font-weight: 600;
-            color: var(--primary-color) !important;
+        .sidebar .nav-link i {
+            font-size: 1.3rem;
+            margin-right: 16px;
         }
-
+        .sidebar-collapsed .nav-link span {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-profile span {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-profile img {
+            margin-right: 0 !important;
+        }
+        .sidebar-profile {
+            background: rgba(255,255,255,0.07);
+            border-radius: 12px;
+            margin: 18px 12px 12px 12px;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar-profile .dropdown-toggle {
+            color: #fff;
+        }
+        .sidebar-profile img {
+            border: 2px solid var(--primary-color);
+            margin-right: 10px;
+        }
+        .sidebar-profile .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #4cc9f0;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .sidebar-profile .dropdown-menu {
+            background: #23242b;
+            border-radius: 10px;
+            border: none;
+        }
+        .sidebar-profile .dropdown-item {
+            color: #fff;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .sidebar-profile .dropdown-item:hover {
+            background: var(--primary-color);
+        }
         .main-content {
             width: calc(100vw - var(--sidebar-width));
             margin-left: var(--sidebar-width);
-            padding: 2rem;
+            padding: 2.5rem 2.5rem 2.5rem 2.5rem;
             transition: all 0.3s ease;
             min-height: 100vh;
             margin-top: 0;
             background: transparent;
             overflow: visible;
         }
-
-        @media (max-width: 991.98px) {
-            .sidebar {
-                position: fixed;
-                top: var(--header-height);
-                left: 0;
-                width: 100vw;
-                height: auto;
-                z-index: 1050;
-            }
-            .main-content {
-                margin-left: 0;
-                margin-top: calc(var(--header-height) + 60px);
-                padding: 1rem;
-            }
-        }
-
-        .stat-card {
+        .card, .stat-card {
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(67,97,238,0.07);
             border: none;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,.05);
-            transition: all 0.3s ease;
-            overflow: hidden;
-            position: relative;
+            animation: fadeInUp 0.7s cubic-bezier(.39,.575,.565,1) both;
         }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(255,255,255,.1), rgba(255,255,255,0));
-            z-index: 1;
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 25px rgba(0,0,0,.1);
-        }
-
-        .stat-card .card-body {
-            position: relative;
-            z-index: 2;
-            padding: 1.5rem;
-        }
-
-        .stat-card .card-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
+        .stat-card .card-title, .card-header h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
             letter-spacing: 1px;
-            margin-bottom: 1rem;
-            opacity: 0.8;
-        }
-
-        .stat-card .card-text {
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .nav-link {
-            color: rgba(255,255,255,.8);
-            padding: 12px 20px;
-            margin: 4px 0;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(255,255,255,.1);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .nav-link.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .nav-link i {
-            margin-right: 10px;
             font-size: 1.1rem;
         }
-
-        .card {
+        .stat-card .card-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        .floating-add-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 2000;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
             border: none;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,.05);
-            margin-bottom: 1.5rem;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 24px rgba(67,97,238,0.18);
+            transition: background 0.2s, box-shadow 0.2s;
         }
-
-        .card-header {
-            background-color: white;
-            border-bottom: 1px solid rgba(0,0,0,.05);
-            padding: 1.25rem;
-            border-radius: 15px 15px 0 0 !important;
+        .floating-add-btn:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            box-shadow: 0 8px 32px rgba(67,97,238,0.28);
         }
-
-        .card-header h5 {
-            margin: 0;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-
-        .table {
-            margin: 0;
-        }
-
-        .table th {
-            font-weight: 600;
-            color: var(--dark-color);
-            border-top: none;
-        }
-
-        .table td {
-            vertical-align: middle;
-        }
-
-        .badge {
-            padding: 0.5em 1em;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background-color: var(--warning-color);
-            border-color: var(--warning-color);
-        }
-
-        .btn-danger:hover {
-            background-color: #d90429;
-            border-color: #d90429;
-            transform: translateY(-2px);
-        }
-
-        .form-control {
-            border-radius: 8px;
-            border: 1px solid rgba(0,0,0,.1);
-            padding: 0.75rem 1rem;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
-        }
-
-        .alert {
-            border-radius: 10px;
-            border: none;
-            padding: 1rem 1.5rem;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stat-card, .card {
-            animation: fadeIn 0.5s ease-out;
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 70px !important;
+            }
+            .main-content {
+                margin-left: 70px;
+                width: calc(100vw - 70px);
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar">
         <div class="sidebar-sticky d-flex flex-column justify-content-between h-100">
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -367,7 +280,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             </ul>
             <div class="sidebar-profile p-3 border-top mt-3">
                 <div class="dropdown">
-                    <button class="btn btn-link text-white d-flex align-items-center w-100 p-0" type="button" id="userMenu" data-bs-toggle="dropdown">
+                    <button class="btn btn-link text-white d-flex align-items-center w-100 p-0 dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                        <span class="status-dot"></span>
                         <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="36" height="36">
                         <span class="me-2">Admin</span>
                         <i class="bi bi-chevron-up ms-auto"></i>
@@ -589,6 +503,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             </main>
         </div>
     </div>
+
+    <button class="floating-add-btn" title="Add New">
+        <i class="bi bi-plus-lg"></i>
+    </button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
