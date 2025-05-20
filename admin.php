@@ -964,7 +964,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             width: 90%;
             padding: 0.9rem 1.2rem;
             border-radius: 10px;
-            background: #ffeaea;
+            background: rgba(255,0,0,0.08);
             color: #c0392b;
             font-weight: bold;
             font-size: 1.08rem;
@@ -974,7 +974,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             outline: none;
         }
         .sidebar-logout .logout-link:hover {
-            background: #ffd6d6;
+            background: rgba(255,0,0,0.16);
             color: #a83232;
         }
         .sidebar-logout .logout-link i {
