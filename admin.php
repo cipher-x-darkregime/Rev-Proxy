@@ -72,8 +72,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f4f6f9 0%, #e9eafc 100%);
-            padding-top: 0;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9eafc 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .sidebar {
@@ -208,12 +209,16 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .main-content {
             width: calc(100vw - var(--sidebar-width));
             margin-left: var(--sidebar-width);
-            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
-            transition: all 0.3s ease;
             min-height: 100vh;
-            margin-top: 0;
-            background: #f6f8fb;
-            overflow: visible;
+            transition: width 0.35s cubic-bezier(.4,2,.6,1), margin-left 0.35s cubic-bezier(.4,2,.6,1), padding 0.25s;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .sidebar-collapsed ~ .main-content {
+            width: calc(100vw - var(--sidebar-collapsed-width));
+            margin-left: var(--sidebar-collapsed-width);
         }
         .section-block {
             background: #f8fafc;
@@ -225,16 +230,16 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .section-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.35rem;
-            font-weight: 700;
+            font-size: 1.7rem;
+            font-weight: 800;
             color: #23283e;
-            margin-bottom: 1.7rem;
+            margin-bottom: 2.2rem;
             letter-spacing: 0.5px;
         }
         .section-header i {
-            font-size: 1.7rem;
+            font-size: 2.2rem;
             color: var(--primary-color);
         }
         .card, .stat-card {
@@ -701,26 +706,29 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             }
         }
         .main-floating-card {
-            background: #fff;
-            border-radius: 32px;
-            box-shadow: 0 8px 40px rgba(67,97,238,0.10);
+            background: rgba(255,255,255,0.85);
+            border-radius: 36px;
+            box-shadow: 0 12px 48px 0 rgba(67,97,238,0.13), 0 1.5px 8px 0 rgba(67,97,238,0.07);
+            backdrop-filter: blur(8px);
             padding: 3.5rem 3.5rem 2.5rem 3.5rem;
-            margin: 2.5rem auto 2.5rem auto;
-            max-width: 1200px;
+            margin: 3.2rem 2.5vw 2.5rem 2.5vw;
+            width: auto;
+            max-width: 100%;
+            transition: box-shadow 0.25s, border-radius 0.25s, padding 0.25s, margin 0.35s, width 0.35s;
         }
         .section-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.7rem;
+            font-weight: 800;
             color: #23283e;
             margin-bottom: 2.2rem;
             letter-spacing: 0.5px;
         }
         .section-header i {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--primary-color);
         }
         .dashboard-grid {
@@ -841,12 +849,41 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .server-table .btn:last-child {
             margin-right: 0;
         }
-        @media (max-width: 991.98px) {
+        @media (max-width: 1200px) {
             .main-floating-card {
-                padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+                padding: 2.2rem 1.2rem 1.2rem 1.2rem;
+                border-radius: 24px;
+                margin: 2.2rem 1vw 1.2rem 1vw;
             }
-            .dashboard-card, .server-card {
-                padding: 1rem 0.6rem 0.6rem 0.6rem;
+            .section-header {
+                font-size: 1.25rem;
+                gap: 10px;
+            }
+        }
+        @media (max-width: 991.98px) {
+            .main-content {
+                width: calc(100vw - var(--sidebar-collapsed-width));
+                margin-left: var(--sidebar-collapsed-width);
+            }
+            .main-floating-card {
+                padding: 1.2rem 0.5rem 0.7rem 0.5rem;
+                border-radius: 16px;
+                margin: 1.2rem 0.5vw 0.7rem 0.5vw;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .main-content {
+                width: 100vw;
+                margin-left: 0;
+            }
+            .main-floating-card {
+                padding: 0.5rem 0.1rem 0.5rem 0.1rem;
+                border-radius: 10px;
+                margin: 0.5rem 0.1vw 0.5rem 0.1vw;
+            }
+            .section-header {
+                font-size: 1.05rem;
+                gap: 7px;
             }
         }
     </style>
