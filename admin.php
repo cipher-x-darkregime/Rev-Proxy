@@ -113,12 +113,14 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
 
         .main-content {
+            width: calc(100vw - var(--sidebar-width));
             margin-left: var(--sidebar-width);
             padding: 2rem;
             transition: all 0.3s ease;
             min-height: calc(100vh - var(--header-height));
             margin-top: var(--header-height);
             background: transparent;
+            overflow: visible;
         }
 
         @media (max-width: 991.98px) {
