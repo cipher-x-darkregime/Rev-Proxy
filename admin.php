@@ -206,14 +206,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             background: var(--primary-color);
         }
         .main-content {
-            width: calc(100vw - var(--sidebar-width));
-            margin-left: var(--sidebar-width);
-            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
-            transition: all 0.3s ease;
             min-height: 100vh;
-            margin-top: 0;
-            background: #f6f8fb;
-            overflow: visible;
+            transition: margin-left 0.4s cubic-bezier(.4,2,.6,1), width 0.4s cubic-bezier(.4,2,.6,1), padding 0.3s;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
         .section-block {
             background: #f8fafc;
@@ -227,15 +226,26 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             align-items: center;
             gap: 12px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #23283e;
-            margin-bottom: 1.7rem;
+            margin-bottom: 2.2rem;
             letter-spacing: 0.5px;
+            position: relative;
+        }
+        .section-header::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 32px;
+            border-radius: 6px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            margin-right: 16px;
         }
         .section-header i {
-            font-size: 1.7rem;
+            font-size: 2rem;
             color: var(--primary-color);
+            margin-left: -8px;
         }
         .card, .stat-card {
             border-radius: 22px;
@@ -701,12 +711,42 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             }
         }
         .main-floating-card {
-            background: #fff;
-            border-radius: 32px;
-            box-shadow: 0 8px 40px rgba(67,97,238,0.10);
-            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
-            margin: 2.5rem auto 2.5rem auto;
+            background: rgba(255,255,255,0.85);
+            border-radius: 38px;
+            box-shadow: 0 12px 48px 0 rgba(67,97,238,0.13), 0 1.5px 8px 0 rgba(67,97,238,0.07);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(67,97,238,0.08);
+            padding: 3.8rem 4.2rem 2.8rem 4.2rem;
+            margin: 3.2rem auto 3.2rem auto;
             max-width: 1200px;
+            width: 100%;
+            transition: margin-left 0.4s cubic-bezier(.4,2,.6,1), width 0.4s cubic-bezier(.4,2,.6,1), padding 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .main-floating-card:hover {
+            box-shadow: 0 20px 64px 0 rgba(67,97,238,0.18), 0 2px 12px 0 rgba(67,97,238,0.10);
+            transform: scale(1.01);
+        }
+        /* Responsive adjustment for sidebar collapse */
+        #sidebar.sidebar-collapsed ~ .main-content,
+        #sidebar.sidebar-collapsed ~ .main-content .main-floating-card {
+            margin-left: 72px !important;
+            max-width: calc(100vw - 90px);
+            padding-left: 1.2rem;
+            padding-right: 1.2rem;
+        }
+        .main-content,
+        .main-floating-card {
+            margin-left: 270px;
+        }
+        #sidebar.sidebar-collapsed ~ .main-content {
+            margin-left: 72px;
+        }
+        #sidebar.sidebar-collapsed ~ .main-content .main-floating-card {
+            margin-left: 0;
+            max-width: calc(100vw - 90px);
+            padding-left: 1.2rem;
+            padding-right: 1.2rem;
         }
         .section-header {
             display: flex;
@@ -718,132 +758,26 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             color: #23283e;
             margin-bottom: 2.2rem;
             letter-spacing: 0.5px;
+            position: relative;
+        }
+        .section-header::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 32px;
+            border-radius: 6px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            margin-right: 16px;
         }
         .section-header i {
             font-size: 2rem;
             color: var(--primary-color);
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2.2rem;
-            margin-bottom: 2.5rem;
-        }
-        .dashboard-card, .server-card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
-            border: 1.5px solid #f0f1f6;
-            padding: 2.1rem 1.6rem 1.3rem 1.6rem;
-            position: relative;
-            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
-            min-height: 160px;
-        }
-        .dashboard-card:hover, .server-card:hover {
-            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
-            border: 1.5px solid var(--primary-color);
-            transform: translateY(-2px) scale(1.015);
-        }
-        .dashboard-card .icon, .server-card .icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.1rem;
-            background: #f2f6fc;
-            color: var(--primary-color);
-            box-shadow: none;
-        }
-        .dashboard-card .card-title, .server-card .card-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #23283e;
-            margin-bottom: 0.3rem;
-        }
-        .dashboard-card .card-number, .server-card .card-number {
-            font-size: 2.1rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            margin-bottom: 0.3rem;
-        }
-        .dashboard-card .badge, .server-card .badge {
-            font-size: 0.92rem;
-            border-radius: 7px;
-            padding: 0.28em 0.7em;
-            font-weight: 500;
-            background: #f2f6fc;
-            color: var(--primary-color);
-            border: none;
-        }
-        .dashboard-card .badge.text-success, .server-card .badge.text-success {
-            color: #1b7c4a;
-            background: #e6f9f0;
-        }
-        .dashboard-card .badge.text-info, .server-card .badge.text-info {
-            color: #2274e0;
-            background: #e9f4ff;
-        }
-        .server-table th, .server-table td {
-            border: none;
-            padding: 1.25rem 1.3rem;
-            vertical-align: middle;
-        }
-        .server-table th {
-            background: #f6f8fb;
-            color: #23283e;
-            font-weight: 800;
-            font-size: 1.13rem;
-            letter-spacing: 0.03em;
-        }
-        .server-table tbody tr {
-            background: #fff;
-            border-radius: 14px;
-        }
-        .server-table tbody tr:hover {
-            background: #f2f6fc;
-        }
-        .server-table td {
-            font-size: 1.08rem;
-            color: #23283e;
-        }
-        .server-table .server-name {
-            font-weight: 700;
-            font-size: 1.13rem;
-            color: var(--primary-color);
-        }
-        .server-table .badge {
-            font-size: 0.98rem;
-            border-radius: 8px;
-            padding: 0.38em 1.1em;
-            font-weight: 600;
-            background: #f2f6fc;
-            color: var(--primary-color);
-            border: none;
-        }
-        .server-table .badge.text-success {
-            color: #1b7c4a;
-            background: #e6f9f0;
-        }
-        .server-table .btn {
-            border-radius: 999px !important;
-            font-size: 1.08rem;
-            padding: 0.5rem 1.3rem;
-            margin-right: 0.3rem;
-        }
-        .server-table .btn:last-child {
-            margin-right: 0;
+            margin-left: -8px;
         }
         @media (max-width: 991.98px) {
             .main-floating-card {
                 padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+                border-radius: 18px;
             }
             .dashboard-card, .server-card {
                 padding: 1rem 0.6rem 0.6rem 0.6rem;
