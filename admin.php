@@ -952,27 +952,36 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             display: block;
         }
         .sidebar-logout {
-            width: 100%;
-            padding: 1.5rem 1rem 1.5rem 1rem;
+            margin-top: auto;
+            padding: 1.2rem 0 1.2rem 0;
             display: flex;
             justify-content: center;
         }
-        .sidebar-logout .btn-logout {
-            width: 100%;
-            background: #ff3b3b;
-            color: #fff;
-            font-weight: 700;
+        .sidebar-logout .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 90%;
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            background: #ffeaea;
+            color: #c0392b;
+            font-weight: bold;
             font-size: 1.08rem;
-            border-radius: 12px;
+            text-decoration: none;
+            transition: background 0.18s, color 0.18s;
             border: none;
-            padding: 0.9rem 0;
-            box-shadow: 0 2px 8px rgba(255,59,59,0.08);
-            transition: background 0.18s, box-shadow 0.18s;
+            outline: none;
         }
-        .sidebar-logout .btn-logout:hover {
-            background: #d90429;
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(255,59,59,0.18);
+        .sidebar-logout .logout-link:hover {
+            background: #ffd6d6;
+            color: #a83232;
+        }
+        .sidebar-logout .logout-link i {
+            font-size: 1.3rem;
+        }
+        .sidebar.sidebar-collapsed .sidebar-logout .logout-link span {
+            display: none;
         }
     </style>
 </head>
@@ -1024,8 +1033,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 </li>
             </ul>
             <div class="sidebar-logout">
-                <a href="logout.php" class="btn btn-logout text-center">
-                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                <a href="logout.php" class="logout-link">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
                 </a>
             </div>
         </div>
