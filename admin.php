@@ -1061,49 +1061,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 </tr>
                             </tbody>
                         </table>
-                    <div class="server-card mb-4">
-                        <div class="card-body">
-                            <div class="server-table-responsive">
-                                <table class="table server-table align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>Server Name</th>
-                                            <th>Status</th>
-                                            <th>Location</th>
-                                            <th>Users</th>
-                                            <th>Uptime</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="server-name">Server 1</td>
-                                            <td><span class="badge text-success">Active</span></td>
-                                            <td>US East</td>
-                                            <td>150</td>
-                                            <td>99.9%</td>
-                                            <td>
-                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="server-name">Server 2</td>
-                                            <td><span class="badge text-success">Active</span></td>
-                                            <td>EU West</td>
-                                            <td>120</td>
-                                            <td>99.8%</td>
-                                            <td>
-                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </main>
