@@ -117,6 +117,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             padding: 2rem;
             transition: all 0.3s ease;
             min-height: calc(100vh - var(--header-height));
+            margin-top: var(--header-height);
         }
 
         .stat-card {
@@ -305,25 +306,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-box-seam me-2"></i>
-                Tool Seller Dashboard
-            </a>
-            <div class="d-flex align-items-center">
-                <div class="dropdown me-3">
-                    <button class="btn btn-link text-dark position-relative" type="button" id="notifications" data-bs-toggle="dropdown">
-                        <i class="bi bi-bell fs-5"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3
-                        </span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">New user registered</a></li>
-                        <li><a class="dropdown-item" href="#">Server status changed</a></li>
-                        <li><a class="dropdown-item" href="#">New tool added</a></li>
-                    </ul>
-                </div>
+        <div class="container-fluid justify-content-end">
+            <div class="d-flex align-items-center ms-auto">
                 <div class="dropdown">
                     <button class="btn btn-link text-dark d-flex align-items-center" type="button" id="userMenu" data-bs-toggle="dropdown">
                         <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="32" height="32">
