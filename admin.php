@@ -983,6 +983,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .sidebar.sidebar-collapsed .sidebar-logout .logout-link span {
             display: none;
         }
+        .logs-section {
+            display: none;
+        }
+        .logs-section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -1017,6 +1023,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     <a class="nav-link" href="#users">
                         <i class="bi bi-people"></i>
                         Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#logs">
+                        <i class="bi bi-clipboard-data"></i>
+                        Logs
                     </a>
                 </li>
                 <li class="nav-item">
@@ -1074,6 +1086,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             <button class="btn btn-outline-primary" id="dashboard-manage-tools"><i class="bi bi-tools"></i> Manage Tools</button>
                             <button class="btn btn-outline-primary" id="dashboard-manage-servers"><i class="bi bi-hdd-stack"></i> Manage Servers</button>
                             <button class="btn btn-outline-primary" id="dashboard-manage-users"><i class="bi bi-people"></i> Manage Users</button>
+                            <button class="btn btn-outline-primary" id="dashboard-see-logs"><i class="bi bi-clipboard-data"></i> See Logs</button>
                         </div>
                     </div>
 
@@ -1225,6 +1238,45 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             </table>
                         </div>
                     </div>
+
+                    <!-- Logs Management Section -->
+                    <div class="logs-section" id="logs-management-section">
+                        <div class="section-header-row">
+                            <div class="section-header"><i class="bi bi-clipboard-data"></i> Logs</div>
+                        </div>
+                        <div class="server-table-responsive">
+                            <table class="table server-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>User</th>
+                                        <th>Action</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2024-06-01 12:34</td>
+                                        <td>John Doe</td>
+                                        <td>Login</td>
+                                        <td>Successful login</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-06-01 12:40</td>
+                                        <td>Jane Smith</td>
+                                        <td>Added Tool</td>
+                                        <td>Tool Alpha</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-06-01 12:45</td>
+                                        <td>John Doe</td>
+                                        <td>Deleted Server</td>
+                                        <td>Server 2</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -1264,6 +1316,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => { if (l.textContent.includes('Users')) l.classList.add('active'); });
         };
+        document.getElementById('dashboard-see-logs').onclick = () => {
+            showSection('logs-management-section');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => { if (l.textContent.includes('Logs')) l.classList.add('active'); });
+        };
         // Sidebar menu (example, you may need to update selectors to match your sidebar links)
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1275,6 +1332,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 else if (this.textContent.includes('Tools')) showSection('tools-management-section');
                 else if (this.textContent.includes('Servers')) showSection('servers-management-section');
                 else if (this.textContent.includes('Users')) showSection('users-management-section');
+                else if (this.textContent.includes('Logs')) showSection('logs-management-section');
                 else showSection(null);
             });
         });
