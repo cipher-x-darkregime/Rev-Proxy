@@ -919,6 +919,32 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 padding: 0.7rem 0.5rem;
             }
         }
+        .dashboard-management {
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .dashboard-management .btn {
+            font-size: 1.08rem;
+            padding: 1.1rem 2.2rem;
+            border-radius: 18px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.07);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .dashboard-management .btn i {
+            font-size: 1.3rem;
+        }
+        .management-section {
+            display: none;
+            margin-top: 2.5rem;
+        }
+        .management-section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -1014,102 +1040,160 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         </div>
                     </div>
 
-                    <!-- Tool Management Section -->
-                    <div class="section-header-row">
-                        <div class="section-header"><i class="bi bi-tools"></i> Tool Management</div>
-                        <button class="btn btn-primary">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Tool
-                        </button>
-                    </div>
-                    <div class="server-table-responsive">
-                        <table class="table server-table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Tool Name</th>
-                                    <th>Status</th>
-                                    <th>Users</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Tool Alpha</td>
-                                    <td><span class="badge text-success">Active</span></td>
-                                    <td>87</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Tool Beta</td>
-                                    <td><span class="badge text-danger">Inactive</span></td>
-                                    <td>34</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Tool Gamma</td>
-                                    <td><span class="badge text-success">Active</span></td>
-                                    <td>120</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                        <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Dashboard Management Buttons -->
+                    <div class="dashboard-management">
+                        <button class="btn btn-outline-primary" id="dashboard-manage-tools"><i class="bi bi-tools"></i> Manage Tools</button>
+                        <button class="btn btn-outline-primary" id="dashboard-manage-servers"><i class="bi bi-hdd-stack"></i> Manage Servers</button>
+                        <button class="btn btn-outline-primary" id="dashboard-manage-users"><i class="bi bi-people"></i> Manage Users</button>
                     </div>
 
-                    <div class="section-header-row">
-                        <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                        <button class="btn btn-primary">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Server
-                        </button>
+                    <!-- Tool Management Section -->
+                    <div class="management-section" id="tools-management-section">
+                        <div class="section-header-row">
+                            <div class="section-header"><i class="bi bi-tools"></i> Tool Management</div>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Add Tool
+                            </button>
+                        </div>
+                        <div class="server-table-responsive">
+                            <table class="table server-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Tool Name</th>
+                                        <th>Status</th>
+                                        <th>Users</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tool Alpha</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>87</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tool Beta</td>
+                                        <td><span class="badge text-danger">Inactive</span></td>
+                                        <td>34</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tool Gamma</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>120</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="server-table-responsive">
-                        <table class="table server-table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Server Name</th>
-                                    <th>Status</th>
-                                    <th>Location</th>
-                                    <th>Users</th>
-                                    <th>Uptime</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="server-name">Server 1</td>
-                                    <td><span class="badge text-success">Active</span></td>
-                                    <td>US East</td>
-                                    <td>150</td>
-                                    <td>99.9%</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                        <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                        <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="server-name">Server 2</td>
-                                    <td><span class="badge text-success">Active</span></td>
-                                    <td>EU West</td>
-                                    <td>120</td>
-                                    <td>99.8%</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                        <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                        <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                    <!-- Server Management Section -->
+                    <div class="management-section" id="servers-management-section">
+                        <div class="section-header-row">
+                            <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Add Server
+                            </button>
+                        </div>
+                        <div class="server-table-responsive">
+                            <table class="table server-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Server Name</th>
+                                        <th>Status</th>
+                                        <th>Location</th>
+                                        <th>Users</th>
+                                        <th>Uptime</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="server-name">Server 1</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>US East</td>
+                                        <td>150</td>
+                                        <td>99.9%</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="server-name">Server 2</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>EU West</td>
+                                        <td>120</td>
+                                        <td>99.8%</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Users Management Section -->
+                    <div class="management-section" id="users-management-section">
+                        <div class="section-header-row">
+                            <div class="section-header"><i class="bi bi-people"></i> User Management</div>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Add User
+                            </button>
+                        </div>
+                        <div class="server-table-responsive">
+                            <table class="table server-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John Doe</td>
+                                        <td>john@example.com</td>
+                                        <td>Admin</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jane Smith</td>
+                                        <td>jane@example.com</td>
+                                        <td>User</td>
+                                        <td><span class="badge text-danger">Inactive</span></td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -1126,6 +1210,29 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             sidebar.classList.toggle('sidebar-collapsed');
             mainContent.classList.toggle('sidebar-collapsed-main');
         });
+
+        // Management section switching
+        function showSection(sectionId) {
+            document.querySelectorAll('.management-section').forEach(sec => sec.classList.remove('active'));
+            if (sectionId) {
+                document.getElementById(sectionId).classList.add('active');
+            }
+        }
+        // Dashboard management buttons
+        document.getElementById('dashboard-manage-tools').onclick = () => showSection('tools-management-section');
+        document.getElementById('dashboard-manage-servers').onclick = () => showSection('servers-management-section');
+        document.getElementById('dashboard-manage-users').onclick = () => showSection('users-management-section');
+        // Sidebar menu (example, you may need to update selectors to match your sidebar links)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.textContent.includes('Tools')) showSection('tools-management-section');
+                else if (this.textContent.includes('Servers')) showSection('servers-management-section');
+                else if (this.textContent.includes('Users')) showSection('users-management-section');
+                else showSection(null);
+            });
+        });
+        // Show nothing by default (or show dashboard only)
+        showSection(null);
     </script>
 </body>
 </html> 
