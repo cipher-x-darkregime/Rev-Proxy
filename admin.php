@@ -208,36 +208,52 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .main-content {
             width: calc(100vw - var(--sidebar-width));
             margin-left: var(--sidebar-width);
-            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
+            padding: 4rem 4vw 2.5rem 4vw;
+            transition: all 0.3s ease;
             min-height: 100vh;
-            background: #f7fafd;
+            margin-top: 0;
+            background: #fcfcfd;
             overflow: visible;
         }
         .section-block {
-            background: rgba(255,255,255,0.85);
+            background: #fff;
             border-radius: 28px;
             margin-bottom: 3.2rem;
-            padding: 2.5rem 2.5rem 1.5rem 2.5rem;
-            box-shadow: 0 6px 32px rgba(67,97,238,0.07);
-            border: 1.5px solid #f0f1f6;
-            backdrop-filter: blur(6px);
+            padding: 2.7rem 2.7rem 1.5rem 2.7rem;
+            box-shadow: 0 4px 32px rgba(67,97,238,0.06);
+            border: 1.5px solid #f3f4f8;
         }
         .section-header {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.55rem;
+            font-size: 1.7rem;
             font-weight: 800;
             color: #23283e;
-            margin-bottom: 2.1rem;
+            margin-bottom: 2.2rem;
             letter-spacing: 0.5px;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 16px;
+            position: relative;
         }
         .section-header i {
             font-size: 2.1rem;
             color: var(--primary-color);
+            background: #f2f6fc;
+            border-radius: 50%;
+            padding: 0.5rem;
+            margin-right: 0.2rem;
+        }
+        .section-header::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 36px;
+            border-radius: 6px;
+            background: var(--primary-color);
+            margin-right: 18px;
+        }
+        .section-header > *:first-child {
+            margin-left: 0;
         }
         .card, .stat-card {
             border-radius: 22px;
@@ -391,9 +407,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 width: var(--sidebar-collapsed-width) !important;
             }
             .main-content {
-                margin-left: var(--sidebar-collapsed-width);
-                width: calc(100vw - var(--sidebar-collapsed-width));
-                padding: 1.2rem;
+                padding: 1.2rem 0.5rem 1.2rem 0.5rem;
             }
         }
         .dashboard-grid {
@@ -512,25 +526,25 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         /* Management Section Cards */
         .mgmt-card {
-            background: rgba(255,255,255,0.96);
-            border-radius: 20px;
-            box-shadow: 0 4px 24px rgba(67,97,238,0.10);
-            border: 1.5px solid #f0f1f6;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 2px 16px rgba(67,97,238,0.07);
+            border: 1.5px solid #f3f4f8;
             margin-bottom: 0;
             padding: 0;
             overflow: hidden;
             transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
         }
         .mgmt-card:hover {
-            box-shadow: 0 12px 40px rgba(67,97,238,0.13);
+            box-shadow: 0 12px 32px rgba(67,97,238,0.10);
             border: 1.5px solid var(--primary-color);
-            transform: translateY(-4px) scale(1.012);
+            transform: translateY(-3px) scale(1.012);
         }
         .mgmt-card .card-header {
             background: transparent;
             border-bottom: none;
-            border-radius: 20px 20px 0 0 !important;
-            padding: 1.1rem 2rem 0.5rem 2rem;
+            border-radius: 22px 22px 0 0 !important;
+            padding: 1.2rem 2.2rem 0.5rem 2.2rem;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             font-size: 1.08rem;
@@ -543,49 +557,28 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             font-size: 1.08rem;
             padding: 0.5rem 1.3rem;
             border-radius: 999px !important;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.07);
-        }
-        .mgmt-card .card-header .btn-primary {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            border: none;
-        }
-        .mgmt-card .card-header .btn-primary:hover {
-            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-        }
-        .mgmt-card .card-header .btn-outline-primary {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            background: #fff;
-        }
-        .mgmt-card .card-header .btn-outline-primary:hover {
-            background: var(--primary-color);
-            color: #fff;
         }
         .mgmt-card .card-body {
-            padding: 1.7rem 2rem 1.7rem 2rem;
+            padding: 1.7rem 2.2rem 1.7rem 2.2rem;
         }
         .mgmt-table th, .mgmt-table td {
             border: none;
-            padding: 1.15rem 1.2rem;
+            padding: 1.18rem 1.2rem;
             vertical-align: middle;
+            font-size: 1.08rem;
         }
         .mgmt-table th {
-            background: #f7fafd;
+            background: #f6f8fb;
             color: #23283e;
-            font-weight: 800;
+            font-weight: 700;
             font-size: 1.08rem;
         }
         .mgmt-table tbody tr {
-            background: transparent;
+            background: #fff;
             border-radius: 14px;
         }
-        .mgmt-table tbody tr:nth-of-type(odd) {
-            background: #f7fafd;
-        }
         .mgmt-table tbody tr:hover {
-            background: #e9eafc;
+            background: #f2f6fc;
         }
         .mgmt-table .badge {
             font-size: 1.01rem;
@@ -607,48 +600,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .mgmt-table .btn {
             border-radius: 999px !important;
             font-size: 1.08rem;
-            padding: 0.45rem 1.2rem;
-            font-weight: 700;
-        }
-        .mgmt-table .btn-info {
-            background: var(--info-color);
-            color: #fff;
-            border: none;
-        }
-        .mgmt-table .btn-info:hover {
-            background: #2274e0;
-        }
-        .mgmt-table .btn-danger {
-            background: var(--warning-color);
-            color: #fff;
-            border: none;
-        }
-        .mgmt-table .btn-danger:hover {
-            background: #d90429;
-        }
-        .mgmt-table .btn-outline-primary {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            background: #fff;
-        }
-        .mgmt-table .btn-outline-primary:hover {
-            background: var(--primary-color);
-            color: #fff;
-        }
-        .form-control {
-            border-radius: 12px;
-            border: 1.5px solid #e0e3eb;
-            padding: 0.9rem 1.2rem;
-            font-size: 1.08rem;
-        }
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.15rem rgba(67, 97, 238, 0.10);
+            padding: 0.5rem 1.3rem;
         }
         @media (max-width: 767.98px) {
-            .main-content {
-                padding: 0.5rem;
-            }
             .section-block {
                 padding: 1.1rem 0.7rem 0.7rem 0.7rem;
             }
