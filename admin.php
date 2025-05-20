@@ -989,6 +989,25 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .logs-section.active {
             display: block;
         }
+        .table-filter {
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .table-filter input[type="text"] {
+            border-radius: 8px;
+            border: 1.5px solid #e0e3ea;
+            padding: 0.6rem 1.2rem;
+            font-size: 1.05rem;
+            width: 100%;
+            max-width: 320px;
+            transition: border 0.18s;
+        }
+        .table-filter input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
     </style>
 </head>
 <body>
@@ -1093,8 +1112,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add Tool
                             </button>
                         </div>
+                        <div class="table-filter">
+                            <input type="text" id="tools-filter" placeholder="Filter tools...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle">
+                            <table class="table server-table align-middle" id="tools-table">
                                 <thead>
                                     <tr>
                                         <th>Tool Name</th>
@@ -1108,31 +1130,34 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     <tr>
                                         <td>Tool Alpha</td>
                                         <td><span class="badge text-success">Active</span></td>
-                                        <td>3</td>
+                                        <td>Server 1, Server 2</td>
                                         <td>87</td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Server"><i class="bi bi-hdd-stack"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Tool Beta</td>
                                         <td><span class="badge text-danger">Inactive</span></td>
-                                        <td>1</td>
+                                        <td>Server 2</td>
                                         <td>34</td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Server"><i class="bi bi-hdd-stack"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Tool Gamma</td>
                                         <td><span class="badge text-success">Active</span></td>
-                                        <td>5</td>
+                                        <td>Server 1</td>
                                         <td>120</td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Server"><i class="bi bi-hdd-stack"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1149,8 +1174,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add Server
                             </button>
                         </div>
+                        <div class="table-filter">
+                            <input type="text" id="servers-filter" placeholder="Filter servers...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle">
+                            <table class="table server-table align-middle" id="servers-table">
                                 <thead>
                                     <tr>
                                         <th>Server ID</th>
@@ -1158,7 +1186,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         <th>Status</th>
                                         <th>Users</th>
                                         <th>Tool</th>
-                                        <th>Subscription Date</th>
+                                        <th>Subscription Start Date</th>
+                                        <th>Subscription End Date</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -1170,11 +1199,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         <td>150</td>
                                         <td>Tool Alpha</td>
                                         <td>2024-06-01</td>
+                                        <td>2024-12-01</td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-secondary btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-dark btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1183,12 +1213,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         <td><span class="badge text-success">Active</span></td>
                                         <td>120</td>
                                         <td>Tool Beta</td>
-                                        <td>2024-05-15</td>
+                                        <td>2024-06-10</td>
+                                        <td>2024-12-10</td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-secondary btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-dark btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1205,8 +1236,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add User
                             </button>
                         </div>
+                        <div class="table-filter">
+                            <input type="text" id="users-filter" placeholder="Filter users...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle">
+                            <table class="table server-table align-middle" id="users-table">
                                 <thead>
                                     <tr>
                                         <th>User Name</th>
@@ -1247,8 +1281,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-clipboard-data"></i> Logs</div>
                         </div>
+                        <div class="table-filter">
+                            <input type="text" id="logs-filter" placeholder="Filter logs...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle">
+                            <table class="table server-table align-middle" id="logs-table">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -1324,6 +1361,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => { if (l.textContent.includes('Logs')) l.classList.add('active'); });
         };
+
         // Sidebar menu (example, you may need to update selectors to match your sidebar links)
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1339,6 +1377,23 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 else showSection(null);
             });
         });
+
+        // Table filter logic for all management tables
+        function filterTable(inputId, tableId) {
+            const input = document.getElementById(inputId);
+            const table = document.getElementById(tableId);
+            input.addEventListener('input', function() {
+                const filter = this.value.toLowerCase();
+                Array.from(table.tBodies[0].rows).forEach(row => {
+                    row.style.display = Array.from(row.cells).some(cell => cell.textContent.toLowerCase().includes(filter)) ? '' : 'none';
+                });
+            });
+        }
+        filterTable('tools-filter', 'tools-table');
+        filterTable('servers-filter', 'servers-table');
+        filterTable('users-filter', 'users-table');
+        filterTable('logs-filter', 'logs-table');
+
         // Show dashboard by default
         showSection('dashboard-section');
     </script>
