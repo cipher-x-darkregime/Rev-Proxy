@@ -216,7 +216,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             flex-direction: column;
             align-items: stretch;
         }
-        .sidebar-collapsed ~ .main-content {
+        body.sidebar-collapsed .main-content {
             width: calc(100vw - var(--sidebar-collapsed-width));
             margin-left: var(--sidebar-collapsed-width);
         }
@@ -1049,6 +1049,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         const toggleBtn = document.getElementById('sidebarToggleBtn');
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('sidebar-collapsed');
+            document.body.classList.toggle('sidebar-collapsed');
         });
     </script>
 </body>
