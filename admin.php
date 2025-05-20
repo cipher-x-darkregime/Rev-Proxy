@@ -716,6 +716,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             max-width: 100%;
             transition: box-shadow 0.25s, border-radius 0.25s, padding 0.25s, margin 0.35s, width 0.35s;
         }
+        body.sidebar-collapsed .main-floating-card {
+            margin-left: 1vw;
+            margin-right: 1vw;
+            width: auto;
+        }
         .section-header {
             display: flex;
             align-items: center;
