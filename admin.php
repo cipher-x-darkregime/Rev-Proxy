@@ -592,80 +592,89 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 padding: 1rem 0.7rem 1rem 0.7rem;
             }
         }
-        /* Modern Server Management Section */
         .server-section {
             background: #f8fafc;
-            border-radius: 24px;
+            border-radius: 28px;
             margin-bottom: 2.8rem;
-            padding: 2.2rem 2.2rem 1.2rem 2.2rem;
+            padding: 2.5rem 2.5rem 1.5rem 2.5rem;
             box-shadow: 0 2px 8px rgba(67,97,238,0.04);
         }
         .server-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1.7rem;
+            margin-bottom: 2.2rem;
         }
         .server-header .section-title {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.35rem;
-            font-weight: 700;
+            font-size: 1.7rem;
+            font-weight: 800;
             color: #23283e;
             letter-spacing: 0.5px;
         }
         .server-header .section-title i {
-            font-size: 1.7rem;
+            font-size: 2.2rem;
             color: var(--primary-color);
         }
         .server-header .btn {
-            font-size: 1.05rem;
-            padding: 0.6rem 1.5rem;
+            font-size: 1.08rem;
+            padding: 0.7rem 2.1rem;
             border-radius: 999px;
-            font-weight: 600;
+            font-weight: 700;
         }
         .server-card {
             background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
+            border-radius: 22px;
+            box-shadow: 0 4px 18px rgba(67,97,238,0.08);
             border: 1.5px solid #f0f1f6;
             padding: 0;
             overflow: hidden;
             transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
         }
         .server-card:hover {
-            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
+            box-shadow: 0 8px 32px rgba(67,97,238,0.13);
             border: 1.5px solid var(--primary-color);
             transform: translateY(-2px) scale(1.01);
         }
         .server-card .card-body {
-            padding: 1.5rem 2rem 1.5rem 2rem;
+            padding: 2.2rem 2.2rem 2rem 2.2rem;
         }
         .server-table th, .server-table td {
             border: none;
-            padding: 1.05rem 1.1rem;
+            padding: 1.25rem 1.3rem;
             vertical-align: middle;
         }
         .server-table th {
             background: #f6f8fb;
             color: #23283e;
-            font-weight: 700;
-            font-size: 1.03rem;
+            font-weight: 800;
+            font-size: 1.13rem;
+            letter-spacing: 0.03em;
         }
         .server-table tbody tr {
             background: #fff;
-            border-radius: 12px;
+            border-radius: 14px;
         }
         .server-table tbody tr:hover {
             background: #f2f6fc;
         }
+        .server-table td {
+            font-size: 1.08rem;
+            color: #23283e;
+        }
+        .server-table .server-name {
+            font-weight: 700;
+            font-size: 1.13rem;
+            color: var(--primary-color);
+        }
         .server-table .badge {
-            font-size: 0.92rem;
-            border-radius: 7px;
-            padding: 0.28em 0.7em;
-            font-weight: 500;
+            font-size: 0.98rem;
+            border-radius: 8px;
+            padding: 0.38em 1.1em;
+            font-weight: 600;
             background: #f2f6fc;
             color: var(--primary-color);
             border: none;
@@ -676,15 +685,19 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         .server-table .btn {
             border-radius: 999px !important;
-            font-size: 0.98rem;
-            padding: 0.4rem 1.1rem;
+            font-size: 1.08rem;
+            padding: 0.5rem 1.3rem;
+            margin-right: 0.3rem;
         }
-        @media (max-width: 767.98px) {
+        .server-table .btn:last-child {
+            margin-right: 0;
+        }
+        @media (max-width: 991.98px) {
             .server-section {
-                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+                padding: 1.2rem 0.7rem 0.7rem 0.7rem;
             }
             .server-card .card-body {
-                padding: 1rem 0.7rem 1rem 0.7rem;
+                padding: 1.2rem 0.7rem 1rem 0.7rem;
             }
         }
     </style>
@@ -823,7 +836,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Server 1</td>
+                                            <td class="server-name">Server 1</td>
                                             <td><span class="badge text-success">Active</span></td>
                                             <td>US East</td>
                                             <td>150</td>
@@ -835,7 +848,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Server 2</td>
+                                            <td class="server-name">Server 2</td>
                                             <td><span class="badge text-success">Active</span></td>
                                             <td>EU West</td>
                                             <td>120</td>
@@ -854,39 +867,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 </div>
 
                 <!-- Cookie Management Section -->
-                <div class="section-block">
-                    <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
-                    <div class="mgmt-card">
-                        <div class="card-header d-flex justify-content-end align-items-center">
-                            <div class="btn-group">
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-download me-1"></i>
-                                    Export
-                                </button>
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-upload me-1"></i>
-                                    Import
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST" action="">
-                                <input type="hidden" name="action" value="update_cookies">
-                                <div class="mb-3">
-                                    <label for="cookie_data" class="form-label">Cookie Data (JSON format)</label>
-                                    <textarea class="form-control" id="cookie_data" name="cookie_data" rows="10" required><?php echo htmlspecialchars($latest_cookies['cookie_data'] ?? ''); ?></textarea>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">Last updated: <?php echo $latest_cookies['updated_at'] ?? 'Never'; ?></small>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save me-1"></i>
-                                        Update Cookies
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                <!-- (Removed as per user request) -->
             </main>
         </div>
     </div>
