@@ -1099,6 +1099,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     <tr>
                                         <th>Tool Name</th>
                                         <th>Status</th>
+                                        <th>Servers</th>
                                         <th>Users</th>
                                         <th>Actions</th>
                                     </tr>
@@ -1107,28 +1108,31 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     <tr>
                                         <td>Tool Alpha</td>
                                         <td><span class="badge text-success">Active</span></td>
+                                        <td>3</td>
                                         <td>87</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Tool Beta</td>
                                         <td><span class="badge text-danger">Inactive</span></td>
+                                        <td>1</td>
                                         <td>34</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Tool Gamma</td>
                                         <td><span class="badge text-success">Active</span></td>
+                                        <td>5</td>
                                         <td>120</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1149,37 +1153,42 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             <table class="table server-table align-middle">
                                 <thead>
                                     <tr>
+                                        <th>Server ID</th>
                                         <th>Server Name</th>
                                         <th>Status</th>
-                                        <th>Location</th>
                                         <th>Users</th>
-                                        <th>Uptime</th>
+                                        <th>Tool</th>
+                                        <th>Subscription Date</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>1</td>
                                         <td class="server-name">Server 1</td>
                                         <td><span class="badge text-success">Active</span></td>
-                                        <td>US East</td>
                                         <td>150</td>
-                                        <td>99.9%</td>
+                                        <td>Tool Alpha</td>
+                                        <td>2024-06-01</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>2</td>
                                         <td class="server-name">Server 2</td>
                                         <td><span class="badge text-success">Active</span></td>
-                                        <td>EU West</td>
                                         <td>120</td>
-                                        <td>99.8%</td>
+                                        <td>Tool Beta</td>
+                                        <td>2024-05-15</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
