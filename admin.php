@@ -61,12 +61,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             --success-color: #4cc9f0;
             --info-color: #4895ef;
             --warning-color: #f72585;
-            --dark-color: #181a20;
+            --dark-color: #23283e;
             --light-color: #f8f9fa;
             --sidebar-width: 270px;
             --sidebar-collapsed-width: 72px;
-            --glass-bg: rgba(30, 34, 45, 0.72);
-            --glass-blur: 18px;
+            --sidebar-bg: #23283e;
+            --sidebar-border: #20243a;
             --accent-bar: linear-gradient(180deg, #4361ee 0%, #4cc9f0 100%);
         }
 
@@ -84,10 +84,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             z-index: 100;
             width: var(--sidebar-width);
             height: 100vh;
-            background: var(--glass-bg);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-            backdrop-filter: blur(var(--glass-blur));
-            border-right: 2px solid rgba(255,255,255,0.08);
+            background: var(--sidebar-bg);
+            box-shadow: none;
+            border-right: 1.5px solid var(--sidebar-border);
             transition: width 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
             display: flex;
             flex-direction: column;
@@ -168,10 +167,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             margin-right: 0 !important;
         }
         .sidebar-profile {
-            background: rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.04);
             border-radius: 16px;
             margin: 22px 16px 16px 16px;
-            box-shadow: 0 2px 12px rgba(67,97,238,0.08);
+            box-shadow: none;
             display: flex;
             align-items: center;
             justify-content: center;
