@@ -216,7 +216,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             flex-direction: column;
             align-items: stretch;
         }
-        body.sidebar-collapsed .main-content {
+        .sidebar-collapsed ~ .main-content {
             width: calc(100vw - var(--sidebar-collapsed-width));
             margin-left: var(--sidebar-collapsed-width);
         }
@@ -716,11 +716,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             max-width: 100%;
             transition: box-shadow 0.25s, border-radius 0.25s, padding 0.25s, margin 0.35s, width 0.35s;
         }
-        body.sidebar-collapsed .main-floating-card {
-            width: 100%;
-            margin-left: 0;
-            margin-right: 0;
-        }
         .section-header {
             display: flex;
             align-items: center;
@@ -1054,7 +1049,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         const toggleBtn = document.getElementById('sidebarToggleBtn');
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('sidebar-collapsed');
-            document.body.classList.toggle('sidebar-collapsed');
         });
     </script>
 </body>
