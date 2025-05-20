@@ -21,4 +21,4 @@ CREATE TABLE IF NOT EXISTS cookies (
 
 -- Insert default admin user (password: Admin@123)
 INSERT INTO users (username, password, email, is_admin) 
-VALUES ('admin', '$2y$10$8K1p/a0dR1Ux5Y5Y5Y5Y5O5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y', 'admin@example.com', TRUE); 
+VALUES ('admin', '$2a$10$WhsTQ7fFZlAQ1aPRf3sxyOH59m5xWwr9Rsof6pOwWKJ1Dz22kp2di', 'admin@example.com', TRUE); 
