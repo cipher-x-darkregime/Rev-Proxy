@@ -993,7 +993,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             <main class="main-content">
                 <div class="main-floating-card">
                     <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
-                    <div class="mb-4" style="margin-top:-1.2rem; color:#6c7a99; font-size:1.08rem;">Quick stats and system health at a glance</div>
                     <div class="dashboard-grid">
                         <div class="dashboard-card users">
                             <div class="icon"><i class="bi bi-people"></i></div>
