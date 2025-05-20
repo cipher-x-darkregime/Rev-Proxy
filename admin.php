@@ -53,7 +53,24 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --info-color: #4895ef;
+            --warning-color: #f72585;
+            --dark-color: #1a1b1e;
+            --light-color: #f8f9fa;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+        }
+
         .sidebar {
             position: fixed;
             top: 0;
@@ -61,9 +78,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             left: 0;
             z-index: 100;
             padding: 48px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-            background-color: #212529;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(180deg, var(--dark-color) 0%, #2d2f34 100%);
+            width: var(--sidebar-width);
+            transition: all 0.3s ease;
         }
+
         .sidebar-sticky {
             position: relative;
             top: 0;
@@ -72,43 +92,242 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             overflow-x: hidden;
             overflow-y: auto;
         }
+
         .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            box-shadow: 0 2px 15px rgba(0,0,0,.1);
+            background: white !important;
+            padding: 1rem 2rem;
         }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--primary-color) !important;
+        }
+
         .main-content {
-            margin-left: 240px;
-            padding: 20px;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            transition: all 0.3s ease;
         }
+
         .stat-card {
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,.1);
-            transition: transform 0.2s;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
         }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,.1), rgba(255,255,255,0));
+            z-index: 1;
+        }
+
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,.1);
         }
+
+        .stat-card .card-body {
+            position: relative;
+            z-index: 2;
+            padding: 1.5rem;
+        }
+
+        .stat-card .card-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .stat-card .card-text {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
         .nav-link {
-            color: #fff;
-            padding: 10px 20px;
+            color: rgba(255,255,255,.8);
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
+
         .nav-link:hover {
             background-color: rgba(255,255,255,.1);
-            color: #fff;
+            color: white;
+            transform: translateX(5px);
         }
+
         .nav-link.active {
-            background-color: rgba(255,255,255,.2);
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0,0,0,.05);
+            padding: 1.25rem;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: var(--dark-color);
+            border-top: none;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .badge {
+            padding: 0.5em 1em;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #d90429;
+            border-color: #d90429;
+            transform: translateY(-2px);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,.1);
+            padding: 0.75rem 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card, .card {
+            animation: fadeIn 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Tool Seller Dashboard</a>
-            <div class="d-flex">
-                <span class="navbar-text me-3">
-                    Welcome, Admin
-                </span>
-                <a class="btn btn-outline-light btn-sm" href="logout.php">Logout</a>
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-box-seam me-2"></i>
+                Tool Seller Dashboard
+            </a>
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <button class="btn btn-link text-dark position-relative" type="button" id="notifications" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">New user registered</a></li>
+                        <li><a class="dropdown-item" href="#">Server status changed</a></li>
+                        <li><a class="dropdown-item" href="#">New tool added</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-link text-dark d-flex align-items-center" type="button" id="userMenu" data-bs-toggle="dropdown">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="32" height="32">
+                        <span class="me-2">Admin</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -116,36 +335,42 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+            <nav class="sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="#dashboard">
-                                <i class="bi bi-speedometer2 me-2"></i>
+                                <i class="bi bi-speedometer2"></i>
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#servers">
-                                <i class="bi bi-hdd-stack me-2"></i>
+                                <i class="bi bi-hdd-stack"></i>
                                 Servers
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#tools">
-                                <i class="bi bi-tools me-2"></i>
+                                <i class="bi bi-tools"></i>
                                 Tools
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#users">
-                                <i class="bi bi-people me-2"></i>
+                                <i class="bi bi-people"></i>
                                 Users
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="#analytics">
+                                <i class="bi bi-graph-up"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#settings">
-                                <i class="bi bi-gear me-2"></i>
+                                <i class="bi bi-gear"></i>
                                 Settings
                             </a>
                         </li>
@@ -155,41 +380,89 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
             <!-- Main content -->
             <main class="main-content">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                    <h1 class="h2 mb-0">Dashboard Overview</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-download me-1"></i>
+                                Export
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-printer me-1"></i>
+                                Print
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add New
+                        </button>
+                    </div>
                 </div>
 
                 <?php if ($message): ?>
-                    <div class="alert alert-success"><?php echo htmlspecialchars($message); ?></div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <?php echo htmlspecialchars($message); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 <?php endif; ?>
                 
                 <?php if ($error): ?>
-                    <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <?php echo htmlspecialchars($error); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 <?php endif; ?>
 
                 <!-- Statistics Cards -->
                 <div class="row mb-4">
                     <div class="col-md-4">
-                        <div class="card stat-card bg-primary text-white">
+                        <div class="stat-card bg-primary text-white">
                             <div class="card-body">
-                                <h5 class="card-title">Total Users</h5>
-                                <h2 class="card-text"><?php echo $total_users; ?></h2>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title">Total Users</h5>
+                                        <h2 class="card-text"><?php echo $total_users; ?></h2>
+                                    </div>
+                                    <i class="bi bi-people fs-1 opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <span class="badge bg-white text-primary">+12% from last month</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card stat-card bg-success text-white">
+                        <div class="stat-card bg-success text-white">
                             <div class="card-body">
-                                <h5 class="card-title">Active Servers</h5>
-                                <h2 class="card-text">5</h2>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title">Active Servers</h5>
+                                        <h2 class="card-text">5</h2>
+                                    </div>
+                                    <i class="bi bi-hdd-stack fs-1 opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <span class="badge bg-white text-success">All systems operational</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card stat-card bg-info text-white">
+                        <div class="stat-card bg-info text-white">
                             <div class="card-body">
-                                <h5 class="card-title">Total Tools</h5>
-                                <h2 class="card-text">12</h2>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title">Total Tools</h5>
+                                        <h2 class="card-text">12</h2>
+                                    </div>
+                                    <i class="bi bi-tools fs-1 opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <span class="badge bg-white text-info">3 new this week</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -197,40 +470,75 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
                 <!-- Server Management Section -->
                 <div class="card mb-4">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Server Management</h5>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Server
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover align-middle">
                                 <thead>
                                     <tr>
                                         <th>Server Name</th>
                                         <th>Status</th>
                                         <th>Location</th>
                                         <th>Users</th>
+                                        <th>Uptime</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Server 1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-hdd-network text-primary me-2"></i>
+                                                Server 1
+                                            </div>
+                                        </td>
                                         <td><span class="badge bg-success">Active</span></td>
                                         <td>US East</td>
                                         <td>150</td>
+                                        <td>99.9%</td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary">Manage</button>
-                                            <button class="btn btn-sm btn-danger">Stop</button>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-gear"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-info">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-power"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Server 2</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-hdd-network text-primary me-2"></i>
+                                                Server 2
+                                            </div>
+                                        </td>
                                         <td><span class="badge bg-success">Active</span></td>
                                         <td>EU West</td>
                                         <td>120</td>
+                                        <td>99.8%</td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary">Manage</button>
-                                            <button class="btn btn-sm btn-danger">Stop</button>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-gear"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-info">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-power"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -241,8 +549,18 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
                 <!-- Cookie Management Section -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Cookie Management</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-download me-1"></i>
+                                Export
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-upload me-1"></i>
+                                Import
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="">
@@ -251,7 +569,13 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 <label for="cookie_data" class="form-label">Cookie Data (JSON format)</label>
                                 <textarea class="form-control" id="cookie_data" name="cookie_data" rows="10" required><?php echo htmlspecialchars($latest_cookies['cookie_data'] ?? ''); ?></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Update Cookies</button>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Last updated: <?php echo $latest_cookies['updated_at'] ?? 'Never'; ?></small>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-1"></i>
+                                    Update Cookies
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
