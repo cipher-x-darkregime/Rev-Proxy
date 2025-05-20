@@ -886,6 +886,39 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 gap: 7px;
             }
         }
+        .section-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.2rem;
+            gap: 1rem;
+        }
+        .section-header-row .section-header {
+            margin-bottom: 0;
+        }
+        .section-header-row .btn {
+            font-size: 1.08rem;
+            padding: 0.7rem 2.1rem;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+        .server-table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .server-table {
+            min-width: 700px;
+        }
+        @media (max-width: 767.98px) {
+            .server-table {
+                min-width: 520px;
+                font-size: 0.95rem;
+            }
+            .server-table th, .server-table td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -982,16 +1015,16 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         </div>
                     </div>
 
-                    <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                    <div class="section-header-row">
+                        <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                        <button class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Server
+                        </button>
+                    </div>
                     <div class="server-card mb-4">
                         <div class="card-body">
-                            <div class="d-flex justify-content-end mb-3">
-                                <button class="btn btn-primary">
-                                    <i class="bi bi-plus-lg me-1"></i>
-                                    Add Server
-                                </button>
-                            </div>
-                            <div class="table-responsive">
+                            <div class="server-table-responsive">
                                 <table class="table server-table align-middle">
                                     <thead>
                                         <tr>
