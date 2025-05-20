@@ -208,32 +208,152 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .main-content {
             width: calc(100vw - var(--sidebar-width));
             margin-left: var(--sidebar-width);
-            padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
             transition: all 0.3s ease;
             min-height: 100vh;
             margin-top: 0;
-            background: transparent;
+            background: #f6f8fb;
             overflow: visible;
         }
-        .card, .stat-card {
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(67,97,238,0.07);
-            border: none;
-            animation: fadeInUp 0.7s cubic-bezier(.39,.575,.565,1) both;
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #23283e;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
         }
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .section-header i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        .card, .stat-card {
+            border-radius: 22px;
+            box-shadow: 0 6px 32px rgba(67,97,238,0.10);
+            border: none;
+            background: #fff;
+            margin-bottom: 2.2rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .card:hover, .stat-card:hover {
+            box-shadow: 0 12px 40px rgba(67,97,238,0.16);
+            transform: translateY(-4px) scale(1.01);
         }
         .stat-card .card-title, .card-header h5 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             letter-spacing: 1px;
             font-size: 1.1rem;
+            color: #23283e;
         }
         .stat-card .card-text {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 700;
+            color: var(--primary-color);
+        }
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e9eafc 0%, #f4f6f9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-left: auto;
+        }
+        .table {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        .table th, .table td {
+            border: none;
+            padding: 1.1rem 1.2rem;
+            vertical-align: middle;
+        }
+        .table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #f6f8fb;
+        }
+        .table-hover tbody tr:hover {
+            background: #e9eafc;
+        }
+        .table thead tr {
+            border-radius: 18px 18px 0 0;
+        }
+        .table-responsive {
+            border-radius: 18px;
+            overflow: hidden;
+        }
+        .btn, .btn-primary, .btn-danger, .btn-info, .btn-outline-primary {
+            border-radius: 999px !important;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.07);
+            transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            color: #fff;
+        }
+        .btn-danger {
+            background: var(--warning-color);
+            border: none;
+        }
+        .btn-danger:hover {
+            background: #d90429;
+            color: #fff;
+        }
+        .btn-info {
+            background: var(--info-color);
+            border: none;
+            color: #fff;
+        }
+        .btn-info:hover {
+            background: #2274e0;
+            color: #fff;
+        }
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: #fff;
+        }
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        .alert {
+            border-radius: 16px;
+            border: none;
+            padding: 1.1rem 1.6rem;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 12px rgba(67,97,238,0.07);
+            background: #f6f8fb;
+            color: #23283e;
+        }
+        .alert-success {
+            background: #e6f9f0;
+            color: #1b7c4a;
+        }
+        .alert-danger {
+            background: #ffeaea;
+            color: #c0392b;
         }
         .floating-add-btn {
             position: fixed;
@@ -264,7 +384,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             .main-content {
                 margin-left: var(--sidebar-collapsed-width);
                 width: calc(100vw - var(--sidebar-collapsed-width));
-                padding: 1rem;
+                padding: 1.2rem;
             }
         }
     </style>
@@ -339,6 +459,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         <div class="row">
             <!-- Main content -->
             <main class="main-content">
+                <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
                     <h1 class="h2 mb-0">Dashboard Overview</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -428,6 +549,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 </div>
 
                 <!-- Server Management Section -->
+                <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Server Management</h5>
@@ -507,6 +629,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 </div>
 
                 <!-- Cookie Management Section -->
+                <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Cookie Management</h5>
