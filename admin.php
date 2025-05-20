@@ -387,6 +387,85 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 padding: 1.2rem;
             }
         }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.2rem;
+            margin-bottom: 2.5rem;
+        }
+        .dashboard-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: linear-gradient(135deg, #e9eafc 0%, #f4f6f9 100%);
+            border-radius: 22px;
+            box-shadow: 0 6px 32px rgba(67,97,238,0.10);
+            padding: 2.2rem 2rem 1.6rem 2rem;
+            position: relative;
+            transition: box-shadow 0.2s, transform 0.2s;
+            min-height: 180px;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 12px 40px rgba(67,97,238,0.16);
+            transform: translateY(-4px) scale(1.01);
+        }
+        .dashboard-card .icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 12px rgba(67,97,238,0.10);
+        }
+        .dashboard-card.users .icon {
+            background: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+            color: #fff;
+        }
+        .dashboard-card.servers .icon {
+            background: linear-gradient(135deg, #43eefd 0%, #3f37c9 100%);
+            color: #fff;
+        }
+        .dashboard-card.tools .icon {
+            background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+            color: #fff;
+        }
+        .dashboard-card .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #23283e;
+            margin-bottom: 0.5rem;
+        }
+        .dashboard-card .card-number {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .dashboard-card .card-desc {
+            font-size: 1.02rem;
+            color: #6c7a99;
+            margin-bottom: 0.2rem;
+        }
+        .dashboard-card .badge {
+            font-size: 0.95rem;
+            border-radius: 8px;
+            padding: 0.35em 0.9em;
+            font-weight: 500;
+        }
+        @media (max-width: 767.98px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .dashboard-card {
+                padding: 1.3rem 1rem 1rem 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -460,23 +539,25 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             <!-- Main content -->
             <main class="main-content">
                 <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                    <h1 class="h2 mb-0">Dashboard Overview</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-download me-1"></i>
-                                Export
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-printer me-1"></i>
-                                Print
-                            </button>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-primary">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add New
-                        </button>
+                <div class="mb-4" style="margin-top:-1.2rem; color:#6c7a99; font-size:1.08rem;">Quick stats and system health at a glance</div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card users">
+                        <div class="icon"><i class="bi bi-people"></i></div>
+                        <div class="card-title">Total Users</div>
+                        <div class="card-number"><?php echo $total_users; ?></div>
+                        <span class="badge bg-white text-primary">+12% from last month</span>
+                    </div>
+                    <div class="dashboard-card servers">
+                        <div class="icon"><i class="bi bi-hdd-stack"></i></div>
+                        <div class="card-title">Active Servers</div>
+                        <div class="card-number">5</div>
+                        <span class="badge bg-white text-success">All systems operational</span>
+                    </div>
+                    <div class="dashboard-card tools">
+                        <div class="icon"><i class="bi bi-tools"></i></div>
+                        <div class="card-title">Total Tools</div>
+                        <div class="card-number">12</div>
+                        <span class="badge bg-white text-info">3 new this week</span>
                     </div>
                 </div>
 
@@ -495,58 +576,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
-
-                <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="stat-card bg-primary text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="card-title">Total Users</h5>
-                                        <h2 class="card-text"><?php echo $total_users; ?></h2>
-                                    </div>
-                                    <i class="bi bi-people fs-1 opacity-50"></i>
-                                </div>
-                                <div class="mt-3">
-                                    <span class="badge bg-white text-primary">+12% from last month</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stat-card bg-success text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="card-title">Active Servers</h5>
-                                        <h2 class="card-text">5</h2>
-                                    </div>
-                                    <i class="bi bi-hdd-stack fs-1 opacity-50"></i>
-                                </div>
-                                <div class="mt-3">
-                                    <span class="badge bg-white text-success">All systems operational</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stat-card bg-info text-white">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="card-title">Total Tools</h5>
-                                        <h2 class="card-text">12</h2>
-                                    </div>
-                                    <i class="bi bi-tools fs-1 opacity-50"></i>
-                                </div>
-                                <div class="mt-3">
-                                    <span class="badge bg-white text-info">3 new this week</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Server Management Section -->
                 <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
