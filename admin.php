@@ -991,22 +991,24 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         .filter-bar {
             display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 1.2rem;
             align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
         }
         .filter-bar input, .filter-bar select {
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.1rem;
             border-radius: 8px;
-            border: 1px solid #e0e3ea;
-            font-size: 1rem;
-            min-width: 120px;
+            border: 1.5px solid #e0e3ea;
+            font-size: 1.05rem;
+            outline: none;
+        }
+        .filter-bar input:focus, .filter-bar select:focus {
+            border-color: var(--primary-color);
         }
         .filter-bar label {
-            font-size: 0.98rem;
-            color: #6c7a99;
-            margin-right: 0.4rem;
+            font-weight: 600;
+            color: #23283e;
         }
     </style>
 </head>
@@ -1112,18 +1114,19 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add Tool
                             </button>
                         </div>
-                        <form class="filter-bar" id="tools-filter-bar" onsubmit="return false;">
-                            <input type="text" placeholder="Search Tool Name" data-filter-col="0">
-                            <select data-filter-col="1">
-                                <option value="">All Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
+                        <div class="filter-bar">
+                            <label for="tools-filter-input">Filter:</label>
+                            <select id="tools-filter-column">
+                                <option value="all">All</option>
+                                <option value="0">Tool Name</option>
+                                <option value="1">Status</option>
+                                <option value="2">Servers</option>
+                                <option value="3">Users</option>
                             </select>
-                            <input type="number" placeholder="Servers" min="0" data-filter-col="2">
-                            <input type="number" placeholder="Users" min="0" data-filter-col="3">
-                        </form>
+                            <input type="text" id="tools-filter-input" placeholder="Type to filter...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle filterable-table" id="tools-table">
+                            <table class="table server-table align-middle" id="tools-table">
                                 <thead>
                                     <tr>
                                         <th>Tool Name</th>
@@ -1181,18 +1184,22 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add Server
                             </button>
                         </div>
-                        <form class="filter-bar" id="servers-filter-bar" onsubmit="return false;">
-                            <input type="text" placeholder="Search Server Name" data-filter-col="1">
-                            <select data-filter-col="2">
-                                <option value="">All Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
+                        <div class="filter-bar">
+                            <label for="servers-filter-input">Filter:</label>
+                            <select id="servers-filter-column">
+                                <option value="all">All</option>
+                                <option value="0">Server ID</option>
+                                <option value="1">Server Name</option>
+                                <option value="2">Status</option>
+                                <option value="3">Users</option>
+                                <option value="4">Tool</option>
+                                <option value="5">Start Date</option>
+                                <option value="6">End Date</option>
                             </select>
-                            <input type="text" placeholder="Tool" data-filter-col="5">
-                            <input type="number" placeholder="Users" min="0" data-filter-col="3">
-                        </form>
+                            <input type="text" id="servers-filter-input" placeholder="Type to filter...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle filterable-table" id="servers-table">
+                            <table class="table server-table align-middle" id="servers-table">
                                 <thead>
                                     <tr>
                                         <th>Server ID</th>
@@ -1218,7 +1225,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-info btn-sm"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-dark btn-sm"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-warning btn-sm"><i class="bi bi-power"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1233,7 +1240,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
                                             <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-info btn-sm"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-dark btn-sm"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-warning btn-sm"><i class="bi bi-power"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1250,22 +1257,19 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add User
                             </button>
                         </div>
-                        <form class="filter-bar" id="users-filter-bar" onsubmit="return false;">
-                            <input type="text" placeholder="Search User Name" data-filter-col="0">
-                            <input type="text" placeholder="Email" data-filter-col="1">
-                            <select data-filter-col="2">
-                                <option value="">All Roles</option>
-                                <option value="Admin">Admin</option>
-                                <option value="User">User</option>
+                        <div class="filter-bar">
+                            <label for="users-filter-input">Filter:</label>
+                            <select id="users-filter-column">
+                                <option value="all">All</option>
+                                <option value="0">User Name</option>
+                                <option value="1">Email</option>
+                                <option value="2">Role</option>
+                                <option value="3">Status</option>
                             </select>
-                            <select data-filter-col="3">
-                                <option value="">All Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </form>
+                            <input type="text" id="users-filter-input" placeholder="Type to filter...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle filterable-table" id="users-table">
+                            <table class="table server-table align-middle" id="users-table">
                                 <thead>
                                     <tr>
                                         <th>User Name</th>
@@ -1306,13 +1310,19 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-clipboard-data"></i> Logs</div>
                         </div>
-                        <form class="filter-bar" id="logs-filter-bar" onsubmit="return false;">
-                            <input type="text" placeholder="Search User" data-filter-col="1">
-                            <input type="text" placeholder="Action" data-filter-col="2">
-                            <input type="text" placeholder="Details" data-filter-col="3">
-                        </form>
+                        <div class="filter-bar">
+                            <label for="logs-filter-input">Filter:</label>
+                            <select id="logs-filter-column">
+                                <option value="all">All</option>
+                                <option value="0">Date</option>
+                                <option value="1">User</option>
+                                <option value="2">Action</option>
+                                <option value="3">Details</option>
+                            </select>
+                            <input type="text" id="logs-filter-input" placeholder="Type to filter...">
+                        </div>
                         <div class="server-table-responsive">
-                            <table class="table server-table align-middle filterable-table" id="logs-table">
+                            <table class="table server-table align-middle" id="logs-table">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -1406,24 +1416,31 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         // Show dashboard by default
         showSection('dashboard-section');
 
-        // Table filter logic for all filterable tables
-        document.querySelectorAll('.filter-bar').forEach(bar => {
-            bar.addEventListener('input', function() {
-                const table = bar.parentElement.querySelector('.filterable-table');
-                if (!table) return;
-                const filters = Array.from(bar.querySelectorAll('[data-filter-col]')).map(input => input.value.toLowerCase());
+        // Filtering logic for all management tables
+        function setupTableFilter(tableId, inputId, columnId) {
+            const input = document.getElementById(inputId);
+            const columnSelect = document.getElementById(columnId);
+            const table = document.getElementById(tableId);
+            input.addEventListener('input', filter);
+            columnSelect.addEventListener('change', filter);
+            function filter() {
+                const filterValue = input.value.toLowerCase();
+                const col = columnSelect.value;
                 Array.from(table.tBodies[0].rows).forEach(row => {
-                    let show = true;
-                    Array.from(row.cells).forEach((cell, idx) => {
-                        const filterVal = filters[idx];
-                        if (filterVal && !cell.textContent.toLowerCase().includes(filterVal)) {
-                            show = false;
-                        }
-                    });
+                    let show = false;
+                    if (col === 'all') {
+                        show = Array.from(row.cells).some(cell => cell.textContent.toLowerCase().includes(filterValue));
+                    } else {
+                        show = row.cells[col] && row.cells[col].textContent.toLowerCase().includes(filterValue);
+                    }
                     row.style.display = show ? '' : 'none';
                 });
-            });
-        });
+            }
+        }
+        setupTableFilter('tools-table', 'tools-filter-input', 'tools-filter-column');
+        setupTableFilter('servers-table', 'servers-filter-input', 'servers-filter-column');
+        setupTableFilter('users-table', 'users-filter-input', 'users-filter-column');
+        setupTableFilter('logs-table', 'logs-filter-input', 'logs-filter-column');
     </script>
 </body>
 </html> 
