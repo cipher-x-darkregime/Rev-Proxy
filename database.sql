@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
-    is_admin BOOLEAN DEFAULT FALSE
+    user_type ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 );
 
 CREATE TABLE IF NOT EXISTS cookies (
@@ -20,5 +20,9 @@ CREATE TABLE IF NOT EXISTS cookies (
 );
 
 -- Insert default admin user (password: Admin@123)
-INSERT INTO users (username, password, email, is_admin) 
-VALUES ('admin', '$2a$10$WhsTQ7fFZlAQ1aPRf3sxyOH59m5xWwr9Rsof6pOwWKJ1Dz22kp2di', 'admin@example.com', TRUE); 
+INSERT INTO users (username, password, email, user_type) 
+VALUES ('admin', '$2a$10$WhsTQ7fFZlAQ1aPRf3sxyOH59m5xWwr9Rsof6pOwWKJ1Dz22kp2di', 'admin@example.com', 'admin');
+
+-- Insert default regular user (password: User@123)
+INSERT INTO users (username, password, email, user_type) 
+VALUES ('user', '$2a$10$2.3Ty7US6EG0U04DD70Ho.DLnxh0peBXX7xRTH1K6XijrGfwxVRuC', 'user@example.com', 'user'); 
