@@ -945,6 +945,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .management-section.active {
             display: block;
         }
+        .dashboard-section, .tools-section, .servers-section, .users-section {
+            display: none;
+        }
+        .dashboard-section.active, .tools-section.active, .servers-section.active, .users-section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -1018,37 +1024,39 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             <!-- Main content -->
             <main class="main-content">
                 <div class="main-floating-card">
-                    <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
-                    <div class="dashboard-grid">
-                        <div class="dashboard-card users">
-                            <div class="icon"><i class="bi bi-people"></i></div>
-                            <div class="card-title">Total Users</div>
-                            <div class="card-number"><?php echo $total_users; ?></div>
-                            <span class="badge bg-white text-primary">+12% from last month</span>
+                    <!-- Dashboard Overview Section -->
+                    <div class="dashboard-section" id="dashboard-section">
+                        <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card users">
+                                <div class="icon"><i class="bi bi-people"></i></div>
+                                <div class="card-title">Total Users</div>
+                                <div class="card-number"><?php echo $total_users; ?></div>
+                                <span class="badge bg-white text-primary">+12% from last month</span>
+                            </div>
+                            <div class="dashboard-card servers">
+                                <div class="icon"><i class="bi bi-hdd-stack"></i></div>
+                                <div class="card-title">Active Servers</div>
+                                <div class="card-number">5</div>
+                                <span class="badge bg-white text-success">All systems operational</span>
+                            </div>
+                            <div class="dashboard-card tools">
+                                <div class="icon"><i class="bi bi-tools"></i></div>
+                                <div class="card-title">Total Tools</div>
+                                <div class="card-number">12</div>
+                                <span class="badge bg-white text-info">3 new this week</span>
+                            </div>
                         </div>
-                        <div class="dashboard-card servers">
-                            <div class="icon"><i class="bi bi-hdd-stack"></i></div>
-                            <div class="card-title">Active Servers</div>
-                            <div class="card-number">5</div>
-                            <span class="badge bg-white text-success">All systems operational</span>
+                        <!-- Dashboard Management Buttons -->
+                        <div class="dashboard-management">
+                            <button class="btn btn-outline-primary" id="dashboard-manage-tools"><i class="bi bi-tools"></i> Manage Tools</button>
+                            <button class="btn btn-outline-primary" id="dashboard-manage-servers"><i class="bi bi-hdd-stack"></i> Manage Servers</button>
+                            <button class="btn btn-outline-primary" id="dashboard-manage-users"><i class="bi bi-people"></i> Manage Users</button>
                         </div>
-                        <div class="dashboard-card tools">
-                            <div class="icon"><i class="bi bi-tools"></i></div>
-                            <div class="card-title">Total Tools</div>
-                            <div class="card-number">12</div>
-                            <span class="badge bg-white text-info">3 new this week</span>
-                        </div>
-                    </div>
-
-                    <!-- Dashboard Management Buttons -->
-                    <div class="dashboard-management">
-                        <button class="btn btn-outline-primary" id="dashboard-manage-tools"><i class="bi bi-tools"></i> Manage Tools</button>
-                        <button class="btn btn-outline-primary" id="dashboard-manage-servers"><i class="bi bi-hdd-stack"></i> Manage Servers</button>
-                        <button class="btn btn-outline-primary" id="dashboard-manage-users"><i class="bi bi-people"></i> Manage Users</button>
                     </div>
 
                     <!-- Tool Management Section -->
-                    <div class="management-section" id="tools-management-section">
+                    <div class="tools-section" id="tools-management-section">
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-tools"></i> Tool Management</div>
                             <button class="btn btn-primary">
@@ -1100,7 +1108,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </div>
 
                     <!-- Server Management Section -->
-                    <div class="management-section" id="servers-management-section">
+                    <div class="servers-section" id="servers-management-section">
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
                             <button class="btn btn-primary">
@@ -1151,7 +1159,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </div>
 
                     <!-- Users Management Section -->
-                    <div class="management-section" id="users-management-section">
+                    <div class="users-section" id="users-management-section">
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-people"></i> User Management</div>
                             <button class="btn btn-primary">
@@ -1213,7 +1221,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
         // Management section switching
         function showSection(sectionId) {
-            document.querySelectorAll('.management-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.dashboard-section, .tools-section, .servers-section, .users-section').forEach(sec => sec.classList.remove('active'));
             if (sectionId) {
                 document.getElementById(sectionId).classList.add('active');
             }
@@ -1225,14 +1233,15 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         // Sidebar menu (example, you may need to update selectors to match your sidebar links)
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
-                if (this.textContent.includes('Tools')) showSection('tools-management-section');
+                if (this.textContent.includes('Dashboard')) showSection('dashboard-section');
+                else if (this.textContent.includes('Tools')) showSection('tools-management-section');
                 else if (this.textContent.includes('Servers')) showSection('servers-management-section');
                 else if (this.textContent.includes('Users')) showSection('users-management-section');
                 else showSection(null);
             });
         });
-        // Show nothing by default (or show dashboard only)
-        showSection(null);
+        // Show dashboard by default
+        showSection('dashboard-section');
     </script>
 </body>
 </html> 
