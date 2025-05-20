@@ -208,128 +208,32 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         .main-content {
             width: calc(100vw - var(--sidebar-width));
             margin-left: var(--sidebar-width);
-            padding: 3rem 3rem 2.5rem 3rem;
+            padding: 2.5rem 2.5rem 2.5rem 2.5rem;
             transition: all 0.3s ease;
             min-height: 100vh;
             margin-top: 0;
-            background: #f6f8fb;
+            background: transparent;
             overflow: visible;
         }
-        .section-divider {
-            height: 2px;
-            background: linear-gradient(90deg, #4361ee 0%, #4cc9f0 100%);
-            border: none;
-            margin: 2.5rem 0 2rem 0;
-            opacity: 0.12;
-        }
         .card, .stat-card {
-            border-radius: 20px;
-            box-shadow: 0 6px 32px rgba(67,97,238,0.08);
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(67,97,238,0.07);
             border: none;
-            background: #fff;
-            margin-bottom: 2.2rem;
             animation: fadeInUp 0.7s cubic-bezier(.39,.575,.565,1) both;
-            transition: box-shadow 0.2s, transform 0.2s;
         }
-        .card:hover, .stat-card:hover {
-            box-shadow: 0 12px 40px rgba(67,97,238,0.13);
-            transform: translateY(-4px) scale(1.01);
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-        .card-header, .stat-card .card-title {
+        .stat-card .card-title, .card-header h5 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 1.18rem;
-            color: #23283e;
-            background: transparent;
-            border-bottom: none;
-            padding-bottom: 0.5rem;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
         }
         .stat-card .card-text {
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            color: #4361ee;
-        }
-        .table {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 0;
-        }
-        .table th, .table td {
-            vertical-align: middle;
-            border-top: none;
-            padding: 1.1rem 1rem;
-        }
-        .table th {
-            color: #23283e;
-            font-weight: 700;
-            font-size: 1.05rem;
-            background: #f6f8fb;
-        }
-        .table-hover tbody tr:hover {
-            background: #f0f4ff;
-            transition: background 0.2s;
-        }
-        .btn, .btn-primary, .btn-danger, .btn-info, .btn-outline-primary {
-            border-radius: 999px !important;
-            font-weight: 600;
-            padding: 0.6rem 1.4rem;
-            font-size: 1.05rem;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.07);
-            transition: background 0.18s, box-shadow 0.18s, color 0.18s;
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, #4361ee, #4cc9f0);
-            border: none;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #4cc9f0, #4361ee);
-            color: #fff;
-        }
-        .btn-danger {
-            background: #f72585;
-            border: none;
-        }
-        .btn-danger:hover {
-            background: #c9184a;
-            color: #fff;
-        }
-        .btn-info {
-            background: #4895ef;
-            border: none;
-            color: #fff;
-        }
-        .btn-info:hover {
-            background: #4361ee;
-            color: #fff;
-        }
-        .btn-outline-primary {
-            border: 2px solid #4361ee;
-            color: #4361ee;
-            background: #fff;
-        }
-        .btn-outline-primary:hover {
-            background: #4361ee;
-            color: #fff;
-        }
-        .alert {
-            border-radius: 12px;
-            border: none;
-            padding: 1.1rem 1.7rem;
-            font-size: 1.08rem;
-        }
-        .form-control {
-            border-radius: 12px;
-            border: 1.5px solid #e0e3eb;
-            padding: 0.85rem 1.1rem;
-            font-size: 1.05rem;
-            background: #f8fafd;
-            transition: border 0.18s, box-shadow 0.18s;
-        }
-        .form-control:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 0.15rem rgba(67, 97, 238, 0.10);
-            background: #fff;
         }
         .floating-add-btn {
             position: fixed;
@@ -360,7 +264,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             .main-content {
                 margin-left: var(--sidebar-collapsed-width);
                 width: calc(100vw - var(--sidebar-collapsed-width));
-                padding: 1.2rem;
+                padding: 1rem;
             }
         }
     </style>
