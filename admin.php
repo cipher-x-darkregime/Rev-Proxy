@@ -1233,6 +1233,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         // Sidebar menu (example, you may need to update selectors to match your sidebar links)
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
+                // Update active class
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                // Show correct section
                 if (this.textContent.includes('Dashboard')) showSection('dashboard-section');
                 else if (this.textContent.includes('Tools')) showSection('tools-management-section');
                 else if (this.textContent.includes('Servers')) showSection('servers-management-section');
