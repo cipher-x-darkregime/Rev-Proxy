@@ -398,64 +398,60 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
-            background: linear-gradient(135deg, #e9eafc 0%, #f4f6f9 100%);
-            border-radius: 22px;
-            box-shadow: 0 6px 32px rgba(67,97,238,0.10);
-            padding: 2.2rem 2rem 1.6rem 2rem;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(67,97,238,0.08);
+            padding: 2rem 1.5rem 1.3rem 1.5rem;
             position: relative;
             transition: box-shadow 0.2s, transform 0.2s;
-            min-height: 180px;
+            min-height: 160px;
         }
         .dashboard-card:hover {
-            box-shadow: 0 12px 40px rgba(67,97,238,0.16);
-            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 8px 32px rgba(67,97,238,0.13);
+            transform: translateY(-2px) scale(1.01);
         }
         .dashboard-card .icon {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2rem;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 2px 12px rgba(67,97,238,0.10);
-        }
-        .dashboard-card.users .icon {
-            background: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
-            color: #fff;
-        }
-        .dashboard-card.servers .icon {
-            background: linear-gradient(135deg, #43eefd 0%, #3f37c9 100%);
-            color: #fff;
-        }
-        .dashboard-card.tools .icon {
-            background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
-            color: #fff;
+            font-size: 1.7rem;
+            margin-bottom: 1.1rem;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            box-shadow: none;
         }
         .dashboard-card .card-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             font-weight: 700;
             color: #23283e;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         .dashboard-card .card-number {
-            font-size: 2.6rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-        .dashboard-card .card-desc {
-            font-size: 1.02rem;
-            color: #6c7a99;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.4rem;
         }
         .dashboard-card .badge {
-            font-size: 0.95rem;
-            border-radius: 8px;
-            padding: 0.35em 0.9em;
+            font-size: 0.93rem;
+            border-radius: 7px;
+            padding: 0.32em 0.8em;
             font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .dashboard-card .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .dashboard-card .badge.text-info {
+            color: #2274e0;
+            background: #e9f4ff;
         }
         @media (max-width: 767.98px) {
             .dashboard-grid {
@@ -463,7 +459,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 gap: 1.2rem;
             }
             .dashboard-card {
-                padding: 1.3rem 1rem 1rem 1rem;
+                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
             }
         }
     </style>
