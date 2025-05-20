@@ -215,19 +215,26 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             background: #f6f8fb;
             overflow: visible;
         }
+        .section-block {
+            background: #f8fafc;
+            border-radius: 24px;
+            margin-bottom: 2.8rem;
+            padding: 2.2rem 2.2rem 1.2rem 2.2rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.04);
+        }
         .section-header {
             display: flex;
             align-items: center;
             gap: 12px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: #23283e;
-            margin-bottom: 2rem;
+            margin-bottom: 1.7rem;
             letter-spacing: 0.5px;
         }
         .section-header i {
-            font-size: 2rem;
+            font-size: 1.7rem;
             color: var(--primary-color);
         }
         .card, .stat-card {
@@ -504,10 +511,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         /* Management Section Cards */
         .mgmt-card {
             background: #fff;
-            border-radius: 20px;
+            border-radius: 18px;
             box-shadow: 0 2px 8px rgba(67,97,238,0.06);
             border: 1.5px solid #f0f1f6;
-            margin-bottom: 2.2rem;
+            margin-bottom: 0;
             padding: 0;
             overflow: hidden;
             transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
@@ -518,24 +525,24 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             transform: translateY(-2px) scale(1.01);
         }
         .mgmt-card .card-header {
-            background: #f6f8fb;
-            border-bottom: 1px solid #f0f1f6;
-            border-radius: 20px 20px 0 0 !important;
-            padding: 1.3rem 2rem 1.1rem 2rem;
+            background: transparent;
+            border-bottom: none;
+            border-radius: 18px 18px 0 0 !important;
+            padding: 1.1rem 2rem 0.5rem 2rem;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 1.15rem;
+            font-size: 1.08rem;
             color: #23283e;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-end;
         }
-        .mgmt-card .card-header .btn {
+        .mgmt-card .card-header .btn, .mgmt-card .card-header .btn-group .btn {
             font-size: 0.98rem;
             padding: 0.4rem 1.1rem;
         }
         .mgmt-card .card-body {
-            padding: 1.5rem 2rem 1.5rem 2rem;
+            padding: 1.3rem 2rem 1.5rem 2rem;
         }
         .mgmt-table th, .mgmt-table td {
             border: none;
@@ -578,6 +585,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             padding: 0.4rem 1.1rem;
         }
         @media (max-width: 767.98px) {
+            .section-block {
+                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+            }
             .mgmt-card .card-header, .mgmt-card .card-body {
                 padding: 1rem 0.7rem 1rem 0.7rem;
             }
@@ -694,142 +704,148 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <?php endif; ?>
 
                 <!-- Tools Management Section -->
-                <div class="section-header"><i class="bi bi-wrench"></i> Tools Management</div>
-                <div class="mgmt-card mb-4">
-                    <div class="card-header d-flex justify-content-end align-items-center">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Tool
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table mgmt-table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Tool Name</th>
-                                        <th>Status</th>
-                                        <th>Users</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Tool Alpha</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>87</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tool Beta</td>
-                                        <td><span class="badge text-danger">Inactive</span></td>
-                                        <td>34</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tool Gamma</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>120</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="section-block">
+                    <div class="section-header"><i class="bi bi-wrench"></i> Tools Management</div>
+                    <div class="mgmt-card mb-4">
+                        <div class="card-header d-flex justify-content-end align-items-center">
+                            <button class="btn btn-primary btn-sm">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Add Tool
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mgmt-table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Tool Name</th>
+                                            <th>Status</th>
+                                            <th>Users</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tool Alpha</td>
+                                            <td><span class="badge text-success">Active</span></td>
+                                            <td>87</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tool Beta</td>
+                                            <td><span class="badge text-danger">Inactive</span></td>
+                                            <td>34</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tool Gamma</td>
+                                            <td><span class="badge text-success">Active</span></td>
+                                            <td>120</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Server Management Section -->
-                <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                <div class="mgmt-card mb-4">
-                    <div class="card-header d-flex justify-content-end align-items-center">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Server
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table mgmt-table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Server Name</th>
-                                        <th>Status</th>
-                                        <th>Location</th>
-                                        <th>Users</th>
-                                        <th>Uptime</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Server 1</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>US East</td>
-                                        <td>150</td>
-                                        <td>99.9%</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Server 2</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>EU West</td>
-                                        <td>120</td>
-                                        <td>99.8%</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="section-block">
+                    <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                    <div class="mgmt-card mb-4">
+                        <div class="card-header d-flex justify-content-end align-items-center">
+                            <button class="btn btn-primary btn-sm">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Add Server
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mgmt-table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Server Name</th>
+                                            <th>Status</th>
+                                            <th>Location</th>
+                                            <th>Users</th>
+                                            <th>Uptime</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Server 1</td>
+                                            <td><span class="badge text-success">Active</span></td>
+                                            <td>US East</td>
+                                            <td>150</td>
+                                            <td>99.9%</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Server 2</td>
+                                            <td><span class="badge text-success">Active</span></td>
+                                            <td>EU West</td>
+                                            <td>120</td>
+                                            <td>99.8%</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Cookie Management Section -->
-                <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
-                <div class="mgmt-card">
-                    <div class="card-header d-flex justify-content-end align-items-center">
-                        <div class="btn-group">
-                            <button class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-download me-1"></i>
-                                Export
-                            </button>
-                            <button class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-upload me-1"></i>
-                                Import
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="">
-                            <input type="hidden" name="action" value="update_cookies">
-                            <div class="mb-3">
-                                <label for="cookie_data" class="form-label">Cookie Data (JSON format)</label>
-                                <textarea class="form-control" id="cookie_data" name="cookie_data" rows="10" required><?php echo htmlspecialchars($latest_cookies['cookie_data'] ?? ''); ?></textarea>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">Last updated: <?php echo $latest_cookies['updated_at'] ?? 'Never'; ?></small>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-save me-1"></i>
-                                    Update Cookies
+                <div class="section-block">
+                    <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
+                    <div class="mgmt-card">
+                        <div class="card-header d-flex justify-content-end align-items-center">
+                            <div class="btn-group">
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-download me-1"></i>
+                                    Export
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-upload me-1"></i>
+                                    Import
                                 </button>
                             </div>
-                        </form>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="">
+                                <input type="hidden" name="action" value="update_cookies">
+                                <div class="mb-3">
+                                    <label for="cookie_data" class="form-label">Cookie Data (JSON format)</label>
+                                    <textarea class="form-control" id="cookie_data" name="cookie_data" rows="10" required><?php echo htmlspecialchars($latest_cookies['cookie_data'] ?? ''); ?></textarea>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">Last updated: <?php echo $latest_cookies['updated_at'] ?? 'Never'; ?></small>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save me-1"></i>
+                                        Update Cookies
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </main>
