@@ -73,55 +73,650 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f4f6f9 0%, #e9eafc 100%);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
+            padding-top: 0;
         }
-        .layout {
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            box-shadow: none;
+            border-right: 1.5px solid var(--sidebar-border);
+            transition: width 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
             display: flex;
-            width: 100vw;
-            min-height: 100vh;
-            overflow-x: hidden;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+        .sidebar-collapsed {
+            width: var(--sidebar-collapsed-width) !important;
+        }
+        .sidebar .sidebar-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 18px 18px 0 0;
+        }
+        .sidebar .sidebar-toggle-btn {
+            background: rgba(255,255,255,0.12);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.5rem;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sidebar .sidebar-toggle-btn:hover {
+            background: var(--primary-color);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,.88);
+            padding: 16px 28px;
+            margin: 10px 0;
+            border-radius: 14px;
+            font-size: 1.13rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.22s cubic-bezier(.4,2,.6,1);
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: rgba(67,97,238,0.18);
+            color: #fff;
+            box-shadow: 0 4px 16px 0 rgba(67,97,238,0.13);
+        }
+        .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            bottom: 10px;
+            width: 6px;
+            border-radius: 6px;
+            background: var(--accent-bar);
+            box-shadow: 0 0 8px 2px #4cc9f0;
+            animation: glow 1.2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 8px 2px #4cc9f0; }
+            to { box-shadow: 0 0 16px 4px #4361ee; }
+        }
+        .sidebar .nav-link i {
+            font-size: 1.5rem;
+            margin-right: 20px;
+            transition: transform 0.18s;
+        }
+        .sidebar .nav-link:hover i {
+            transform: scale(1.18);
+        }
+        .sidebar-collapsed .nav-link span {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-profile span {
+            display: none;
+        }
+        .sidebar-collapsed .sidebar-profile img {
+            margin-right: 0 !important;
+        }
+        .sidebar-profile {
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            margin: 22px 16px 16px 16px;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 0 10px 0;
+        }
+        .sidebar-profile .dropdown-toggle {
+            color: #fff;
+        }
+        .sidebar-profile img {
+            border: 2.5px solid var(--primary-color);
+            margin-right: 12px;
+        }
+        .sidebar-profile .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #4cc9f0;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #4cc9f0;
+        }
+        .sidebar-profile .dropdown-menu {
+            background: #23242b;
+            border-radius: 12px;
+            border: none;
+        }
+        .sidebar-profile .dropdown-item {
+            color: #fff;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .sidebar-profile .dropdown-item:hover {
+            background: var(--primary-color);
         }
         .main-content {
-            flex: 1 1 0%;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            transition: margin 0.3s cubic-bezier(.4,2,.6,1), width 0.3s cubic-bezier(.4,2,.6,1);
-            background: transparent;
-            padding: 0;
+            width: calc(100vw - var(--sidebar-width));
+            margin-left: var(--sidebar-width);
+            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            margin-top: 0;
+            background: #f6f8fb;
+            overflow: visible;
         }
-        .main-floating-card {
-            width: 100%;
-            max-width: 1200px;
-            margin: 2.5rem auto 2.5rem auto;
-            background: rgba(255,255,255,0.95);
-            border-radius: 32px;
-            box-shadow: 0 8px 40px rgba(67,97,238,0.13);
-            padding: 3.5rem 3.5vw 2.5rem 3.5vw;
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            transition: margin 0.3s cubic-bezier(.4,2,.6,1), width 0.3s cubic-bezier(.4,2,.6,1), padding 0.3s;
-        }
-        .sidebar-collapsed ~ .main-content .main-floating-card {
-            max-width: 98vw;
-            padding-left: 2vw;
-            padding-right: 2vw;
+        .section-block {
+            background: #f8fafc;
+            border-radius: 24px;
+            margin-bottom: 2.8rem;
+            padding: 2.2rem 2.2rem 1.2rem 2.2rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.04);
         }
         .section-header {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.45rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: #23283e;
             margin-bottom: 1.7rem;
+            letter-spacing: 0.5px;
+        }
+        .section-header i {
+            font-size: 1.7rem;
+            color: var(--primary-color);
+        }
+        .card, .stat-card {
+            border-radius: 22px;
+            box-shadow: 0 6px 32px rgba(67,97,238,0.10);
+            border: none;
+            background: #fff;
+            margin-bottom: 2.2rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .card:hover, .stat-card:hover {
+            box-shadow: 0 12px 40px rgba(67,97,238,0.16);
+            transform: translateY(-4px) scale(1.01);
+        }
+        .stat-card .card-title, .card-header h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            color: #23283e;
+        }
+        .stat-card .card-text {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e9eafc 0%, #f4f6f9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-left: auto;
+        }
+        .table {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        .table th, .table td {
+            border: none;
+            padding: 1.1rem 1.2rem;
+            vertical-align: middle;
+        }
+        .table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #f6f8fb;
+        }
+        .table-hover tbody tr:hover {
+            background: #e9eafc;
+        }
+        .table thead tr {
+            border-radius: 18px 18px 0 0;
+        }
+        .table-responsive {
+            border-radius: 18px;
+            overflow: hidden;
+        }
+        .btn, .btn-primary, .btn-danger, .btn-info, .btn-outline-primary {
+            border-radius: 999px !important;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.07);
+            transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            color: #fff;
+        }
+        .btn-danger {
+            background: var(--warning-color);
+            border: none;
+        }
+        .btn-danger:hover {
+            background: #d90429;
+            color: #fff;
+        }
+        .btn-info {
+            background: var(--info-color);
+            border: none;
+            color: #fff;
+        }
+        .btn-info:hover {
+            background: #2274e0;
+            color: #fff;
+        }
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: #fff;
+        }
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        .alert {
+            border-radius: 16px;
+            border: none;
+            padding: 1.1rem 1.6rem;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 12px rgba(67,97,238,0.07);
+            background: #f6f8fb;
+            color: #23283e;
+        }
+        .alert-success {
+            background: #e6f9f0;
+            color: #1b7c4a;
+        }
+        .alert-danger {
+            background: #ffeaea;
+            color: #c0392b;
+        }
+        .floating-add-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 2000;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 24px rgba(67,97,238,0.18);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .floating-add-btn:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+        }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: var(--sidebar-collapsed-width) !important;
+            }
+            .main-content {
+                margin-left: var(--sidebar-collapsed-width);
+                width: calc(100vw - var(--sidebar-collapsed-width));
+                padding: 1.2rem;
+            }
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.2rem;
+            margin-bottom: 2.5rem;
+        }
+        .dashboard-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
+            border: 1.5px solid #f0f1f6;
+            padding: 2.1rem 1.6rem 1.3rem 1.6rem;
+            position: relative;
+            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
+            min-height: 160px;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
+            border: 1.5px solid var(--primary-color);
+            transform: translateY(-2px) scale(1.015);
+        }
+        .dashboard-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.1rem;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            box-shadow: none;
+        }
+        .dashboard-card .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #23283e;
+            margin-bottom: 0.3rem;
+        }
+        .dashboard-card .card-number {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+        .dashboard-card .badge {
+            font-size: 0.92rem;
+            border-radius: 7px;
+            padding: 0.28em 0.7em;
+            font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .dashboard-card .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .dashboard-card .badge.text-info {
+            color: #2274e0;
+            background: #e9f4ff;
+        }
+        /* Tools Management Section */
+        .tools-table th, .tools-table td {
+            border: none;
+            padding: 1.05rem 1.1rem;
+            vertical-align: middle;
+        }
+        .tools-table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.03rem;
+        }
+        .tools-table tbody tr {
+            background: #fff;
+            border-radius: 12px;
+        }
+        .tools-table tbody tr:hover {
+            background: #f2f6fc;
+        }
+        .tools-table .badge {
+            font-size: 0.92rem;
+            border-radius: 7px;
+            padding: 0.28em 0.7em;
+            font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .tools-table .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .tools-table .badge.text-danger {
+            color: #c0392b;
+            background: #ffeaea;
+        }
+        .tools-table .btn {
+            border-radius: 999px !important;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
+        @media (max-width: 767.98px) {
+            .dashboard-card {
+                padding: 1rem 0.6rem 0.6rem 0.6rem;
+            }
+        }
+        /* Management Section Cards */
+        .mgmt-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
+            border: 1.5px solid #f0f1f6;
+            margin-bottom: 0;
+            padding: 0;
+            overflow: hidden;
+            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
+        }
+        .mgmt-card:hover {
+            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
+            border: 1.5px solid var(--primary-color);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .mgmt-card .card-header {
+            background: transparent;
+            border-bottom: none;
+            border-radius: 18px 18px 0 0 !important;
+            padding: 1.1rem 2rem 0.5rem 2rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.08rem;
+            color: #23283e;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .mgmt-card .card-header .btn, .mgmt-card .card-header .btn-group .btn {
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
+        .mgmt-card .card-body {
+            padding: 1.3rem 2rem 1.5rem 2rem;
+        }
+        .mgmt-table th, .mgmt-table td {
+            border: none;
+            padding: 1.05rem 1.1rem;
+            vertical-align: middle;
+        }
+        .mgmt-table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.03rem;
+        }
+        .mgmt-table tbody tr {
+            background: #fff;
+            border-radius: 12px;
+        }
+        .mgmt-table tbody tr:hover {
+            background: #f2f6fc;
+        }
+        .mgmt-table .badge {
+            font-size: 0.92rem;
+            border-radius: 7px;
+            padding: 0.28em 0.7em;
+            font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .mgmt-table .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .mgmt-table .badge.text-danger {
+            color: #c0392b;
+            background: #ffeaea;
+        }
+        .mgmt-table .btn {
+            border-radius: 999px !important;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
+        @media (max-width: 767.98px) {
+            .section-block {
+                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+            }
+            .mgmt-card .card-header, .mgmt-card .card-body {
+                padding: 1rem 0.7rem 1rem 0.7rem;
+            }
+        }
+        .server-section {
+            background: #f8fafc;
+            border-radius: 28px;
+            margin-bottom: 2.8rem;
+            padding: 2.5rem 2.5rem 1.5rem 2.5rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.04);
+        }
+        .server-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.2rem;
+        }
+        .server-header .section-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #23283e;
+            letter-spacing: 0.5px;
+        }
+        .server-header .section-title i {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+        }
+        .server-header .btn {
+            font-size: 1.08rem;
+            padding: 0.7rem 2.1rem;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+        .server-card {
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 4px 18px rgba(67,97,238,0.08);
+            border: 1.5px solid #f0f1f6;
+            padding: 0;
+            overflow: hidden;
+            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
+        }
+        .server-card:hover {
+            box-shadow: 0 8px 32px rgba(67,97,238,0.13);
+            border: 1.5px solid var(--primary-color);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .server-card .card-body {
+            padding: 2.2rem 2.2rem 2rem 2.2rem;
+        }
+        .server-table th, .server-table td {
+            border: none;
+            padding: 1.25rem 1.3rem;
+            vertical-align: middle;
+        }
+        .server-table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 800;
+            font-size: 1.13rem;
+            letter-spacing: 0.03em;
+        }
+        .server-table tbody tr {
+            background: #fff;
+            border-radius: 14px;
+        }
+        .server-table tbody tr:hover {
+            background: #f2f6fc;
+        }
+        .server-table td {
+            font-size: 1.08rem;
+            color: #23283e;
+        }
+        .server-table .server-name {
+            font-weight: 700;
+            font-size: 1.13rem;
+            color: var(--primary-color);
+        }
+        .server-table .badge {
+            font-size: 0.98rem;
+            border-radius: 8px;
+            padding: 0.38em 1.1em;
+            font-weight: 600;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .server-table .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .server-table .btn {
+            border-radius: 999px !important;
+            font-size: 1.08rem;
+            padding: 0.5rem 1.3rem;
+            margin-right: 0.3rem;
+        }
+        .server-table .btn:last-child {
+            margin-right: 0;
+        }
+        @media (max-width: 991.98px) {
+            .server-section {
+                padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+            }
+            .server-card .card-body {
+                padding: 1.2rem 0.7rem 1rem 0.7rem;
+            }
+        }
+        .main-floating-card {
+            background: #fff;
+            border-radius: 32px;
+            box-shadow: 0 8px 40px rgba(67,97,238,0.10);
+            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
+            margin: 2.5rem auto 2.5rem auto;
+            max-width: 1200px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #23283e;
+            margin-bottom: 2.2rem;
             letter-spacing: 0.5px;
         }
         .section-header i {
@@ -139,7 +734,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
-            background: rgba(255,255,255,0.98);
+            background: #fff;
             border-radius: 18px;
             box-shadow: 0 2px 8px rgba(67,97,238,0.06);
             border: 1.5px solid #f0f1f6;
@@ -248,7 +843,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         @media (max-width: 991.98px) {
             .main-floating-card {
-                padding: 1.2rem 2vw 0.7rem 2vw;
+                padding: 1.2rem 0.7rem 0.7rem 0.7rem;
             }
             .dashboard-card, .server-card {
                 padding: 1rem 0.6rem 0.6rem 0.6rem;
@@ -257,149 +852,153 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     </style>
 </head>
 <body>
-    <div class="layout">
-        <!-- Sidebar -->
-        <nav class="sidebar" id="sidebar">
-            <div class="sidebar-toggle">
-                <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle Sidebar">
-                    <i class="bi bi-list"></i>
-                </button>
-            </div>
-            <div class="sidebar-sticky d-flex flex-column justify-content-between h-100">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#dashboard">
-                            <i class="bi bi-speedometer2"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#servers">
-                            <i class="bi bi-hdd-stack"></i>
-                            Servers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tools">
-                            <i class="bi bi-tools"></i>
-                            Tools
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#users">
-                            <i class="bi bi-people"></i>
-                            Users
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#analytics">
-                            <i class="bi bi-graph-up"></i>
-                            Analytics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#settings">
-                            <i class="bi bi-gear"></i>
-                            Settings
-                        </a>
-                    </li>
-                </ul>
-                <div class="sidebar-profile p-3 border-top mt-3">
-                    <div class="dropdown">
-                        <button class="btn btn-link text-white d-flex align-items-center w-100 p-0 dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
-                            <span class="status-dot"></span>
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="36" height="36">
-                            <span class="me-2">Admin</span>
-                            <i class="bi bi-chevron-up ms-auto"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-dark w-100">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                        </ul>
-                    </div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-toggle">
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle Sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+        <div class="sidebar-sticky d-flex flex-column justify-content-between h-100">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#servers">
+                        <i class="bi bi-hdd-stack"></i>
+                        Servers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tools">
+                        <i class="bi bi-tools"></i>
+                        Tools
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users">
+                        <i class="bi bi-people"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#analytics">
+                        <i class="bi bi-graph-up"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#settings">
+                        <i class="bi bi-gear"></i>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-profile p-3 border-top mt-3">
+                <div class="dropdown">
+                    <button class="btn btn-link text-white d-flex align-items-center w-100 p-0 dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                        <span class="status-dot"></span>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="36" height="36">
+                        <span class="me-2">Admin</span>
+                        <i class="bi bi-chevron-up ms-auto"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark w-100">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                    </ul>
                 </div>
             </div>
-        </nav>
-        <main class="main-content">
-            <div class="main-floating-card">
-                <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
-                <div class="mb-4" style="margin-top:-1.2rem; color:#6c7a99; font-size:1.08rem;">Quick stats and system health at a glance</div>
-                <div class="dashboard-grid">
-                    <div class="dashboard-card users">
-                        <div class="icon"><i class="bi bi-people"></i></div>
-                        <div class="card-title">Total Users</div>
-                        <div class="card-number"><?php echo $total_users; ?></div>
-                        <span class="badge bg-white text-primary">+12% from last month</span>
-                    </div>
-                    <div class="dashboard-card servers">
-                        <div class="icon"><i class="bi bi-hdd-stack"></i></div>
-                        <div class="card-title">Active Servers</div>
-                        <div class="card-number">5</div>
-                        <span class="badge bg-white text-success">All systems operational</span>
-                    </div>
-                    <div class="dashboard-card tools">
-                        <div class="icon"><i class="bi bi-tools"></i></div>
-                        <div class="card-title">Total Tools</div>
-                        <div class="card-number">12</div>
-                        <span class="badge bg-white text-info">3 new this week</span>
-                    </div>
-                </div>
+        </div>
+    </nav>
 
-                <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                <div class="server-card mb-4">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-end mb-3">
-                            <button class="btn btn-primary">
-                                <i class="bi bi-plus-lg me-1"></i>
-                                Add Server
-                            </button>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Main content -->
+            <main class="main-content">
+                <div class="main-floating-card">
+                    <div class="section-header"><i class="bi bi-speedometer2"></i> Dashboard Overview</div>
+                    <div class="mb-4" style="margin-top:-1.2rem; color:#6c7a99; font-size:1.08rem;">Quick stats and system health at a glance</div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card users">
+                            <div class="icon"><i class="bi bi-people"></i></div>
+                            <div class="card-title">Total Users</div>
+                            <div class="card-number"><?php echo $total_users; ?></div>
+                            <span class="badge bg-white text-primary">+12% from last month</span>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table server-table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Server Name</th>
-                                        <th>Status</th>
-                                        <th>Location</th>
-                                        <th>Users</th>
-                                        <th>Uptime</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="server-name">Server 1</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>US East</td>
-                                        <td>150</td>
-                                        <td>99.9%</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="server-name">Server 2</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>EU West</td>
-                                        <td>120</td>
-                                        <td>99.8%</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="dashboard-card servers">
+                            <div class="icon"><i class="bi bi-hdd-stack"></i></div>
+                            <div class="card-title">Active Servers</div>
+                            <div class="card-number">5</div>
+                            <span class="badge bg-white text-success">All systems operational</span>
+                        </div>
+                        <div class="dashboard-card tools">
+                            <div class="icon"><i class="bi bi-tools"></i></div>
+                            <div class="card-title">Total Tools</div>
+                            <div class="card-number">12</div>
+                            <span class="badge bg-white text-info">3 new this week</span>
+                        </div>
+                    </div>
+
+                    <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                    <div class="server-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-end mb-3">
+                                <button class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    Add Server
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table server-table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Server Name</th>
+                                            <th>Status</th>
+                                            <th>Location</th>
+                                            <th>Users</th>
+                                            <th>Uptime</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="server-name">Server 1</td>
+                                            <td><span class="badge text-success">Active</span></td>
+                                            <td>US East</td>
+                                            <td>150</td>
+                                            <td>99.9%</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="server-name">Server 2</td>
+                                            <td><span class="badge text-success">Active</span></td>
+                                            <td>EU West</td>
+                                            <td>120</td>
+                                            <td>99.8%</td>
+                                            <td>
+                                                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                                <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
     <button class="floating-add-btn" title="Add New">
