@@ -696,8 +696,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <!-- Tools Management Section -->
                 <div class="section-header"><i class="bi bi-wrench"></i> Tools Management</div>
                 <div class="mgmt-card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-wrench me-2 text-primary"></i>Manage Tools</span>
+                    <div class="card-header d-flex justify-content-end align-items-center">
                         <button class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-lg me-1"></i>
                             Add Tool
@@ -751,8 +750,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <!-- Server Management Section -->
                 <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
                 <div class="mgmt-card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-hdd-stack me-2 text-primary"></i>Manage Servers</span>
+                    <div class="card-header d-flex justify-content-end align-items-center">
                         <button class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-lg me-1"></i>
                             Add Server
@@ -805,8 +803,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <!-- Cookie Management Section -->
                 <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
                 <div class="mgmt-card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-cookie me-2 text-primary"></i>Manage Cookies</span>
+                    <div class="card-header d-flex justify-content-end align-items-center">
                         <div class="btn-group">
                             <button class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-download me-1"></i>
