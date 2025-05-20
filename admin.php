@@ -1295,7 +1295,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
         // Management section switching
         function showSection(sectionId) {
-            document.querySelectorAll('.dashboard-section, .tools-section, .servers-section, .users-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.dashboard-section, .tools-section, .servers-section, .users-section, .logs-section').forEach(sec => sec.classList.remove('active'));
             if (sectionId) {
                 document.getElementById(sectionId).classList.add('active');
             }
