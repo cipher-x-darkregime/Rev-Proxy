@@ -501,6 +501,87 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 padding: 1rem 0.6rem 0.6rem 0.6rem;
             }
         }
+        /* Management Section Cards */
+        .mgmt-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
+            border: 1.5px solid #f0f1f6;
+            margin-bottom: 2.2rem;
+            padding: 0;
+            overflow: hidden;
+            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
+        }
+        .mgmt-card:hover {
+            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
+            border: 1.5px solid var(--primary-color);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .mgmt-card .card-header {
+            background: #f6f8fb;
+            border-bottom: 1px solid #f0f1f6;
+            border-radius: 20px 20px 0 0 !important;
+            padding: 1.3rem 2rem 1.1rem 2rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #23283e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mgmt-card .card-header .btn {
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
+        .mgmt-card .card-body {
+            padding: 1.5rem 2rem 1.5rem 2rem;
+        }
+        .mgmt-table th, .mgmt-table td {
+            border: none;
+            padding: 1.05rem 1.1rem;
+            vertical-align: middle;
+        }
+        .mgmt-table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.03rem;
+        }
+        .mgmt-table tbody tr {
+            background: #fff;
+            border-radius: 12px;
+        }
+        .mgmt-table tbody tr:hover {
+            background: #f2f6fc;
+        }
+        .mgmt-table .badge {
+            font-size: 0.92rem;
+            border-radius: 7px;
+            padding: 0.28em 0.7em;
+            font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .mgmt-table .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .mgmt-table .badge.text-danger {
+            color: #c0392b;
+            background: #ffeaea;
+        }
+        .mgmt-table .btn {
+            border-radius: 999px !important;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
+        @media (max-width: 767.98px) {
+            .mgmt-card .card-header, .mgmt-card .card-body {
+                padding: 1rem 0.7rem 1rem 0.7rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -612,125 +693,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </div>
                 <?php endif; ?>
 
-                <!-- Server Management Section -->
-                <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Server Management</h5>
-                        <button class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-lg me-1"></i>
-                            Add Server
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Server Name</th>
-                                        <th>Status</th>
-                                        <th>Location</th>
-                                        <th>Users</th>
-                                        <th>Uptime</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <i class="bi bi-hdd-network text-primary me-2"></i>
-                                                Server 1
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>US East</td>
-                                        <td>150</td>
-                                        <td>99.9%</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-gear"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-info">
-                                                    <i class="bi bi-graph-up"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-power"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <i class="bi bi-hdd-network text-primary me-2"></i>
-                                                Server 2
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>EU West</td>
-                                        <td>120</td>
-                                        <td>99.8%</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-gear"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-info">
-                                                    <i class="bi bi-graph-up"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-power"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cookie Management Section -->
-                <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Cookie Management</h5>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-download me-1"></i>
-                                Export
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-upload me-1"></i>
-                                Import
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="">
-                            <input type="hidden" name="action" value="update_cookies">
-                            <div class="mb-3">
-                                <label for="cookie_data" class="form-label">Cookie Data (JSON format)</label>
-                                <textarea class="form-control" id="cookie_data" name="cookie_data" rows="10" required><?php echo htmlspecialchars($latest_cookies['cookie_data'] ?? ''); ?></textarea>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">Last updated: <?php echo $latest_cookies['updated_at'] ?? 'Never'; ?></small>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-save me-1"></i>
-                                    Update Cookies
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
                 <!-- Tools Management Section -->
                 <div class="section-header"><i class="bi bi-wrench"></i> Tools Management</div>
-                <div class="card mb-4">
+                <div class="mgmt-card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Manage Tools</h5>
+                        <span><i class="bi bi-wrench me-2 text-primary"></i>Manage Tools</span>
                         <button class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-lg me-1"></i>
                             Add Tool
@@ -738,7 +705,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table tools-table align-middle">
+                            <table class="table mgmt-table align-middle">
                                 <thead>
                                     <tr>
                                         <th>Tool Name</th>
@@ -778,6 +745,94 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Server Management Section -->
+                <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                <div class="mgmt-card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-hdd-stack me-2 text-primary"></i>Manage Servers</span>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Server
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table mgmt-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Server Name</th>
+                                        <th>Status</th>
+                                        <th>Location</th>
+                                        <th>Users</th>
+                                        <th>Uptime</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Server 1</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>US East</td>
+                                        <td>150</td>
+                                        <td>99.9%</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Server 2</td>
+                                        <td><span class="badge text-success">Active</span></td>
+                                        <td>EU West</td>
+                                        <td>120</td>
+                                        <td>99.8%</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-info btn-sm"><i class="bi bi-graph-up"></i></button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-power"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cookie Management Section -->
+                <div class="section-header"><i class="bi bi-cookie"></i> Cookie Management</div>
+                <div class="mgmt-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-cookie me-2 text-primary"></i>Manage Cookies</span>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-download me-1"></i>
+                                Export
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-upload me-1"></i>
+                                Import
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            <input type="hidden" name="action" value="update_cookies">
+                            <div class="mb-3">
+                                <label for="cookie_data" class="form-label">Cookie Data (JSON format)</label>
+                                <textarea class="form-control" id="cookie_data" name="cookie_data" rows="10" required><?php echo htmlspecialchars($latest_cookies['cookie_data'] ?? ''); ?></textarea>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Last updated: <?php echo $latest_cookies['updated_at'] ?? 'Never'; ?></small>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-1"></i>
+                                    Update Cookies
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </main>
