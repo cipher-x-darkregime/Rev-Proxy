@@ -324,16 +324,55 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container-fluid justify-content-end">
-            <div class="d-flex align-items-center ms-auto">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-sticky d-flex flex-column justify-content-between h-100">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#servers">
+                        <i class="bi bi-hdd-stack"></i>
+                        Servers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tools">
+                        <i class="bi bi-tools"></i>
+                        Tools
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users">
+                        <i class="bi bi-people"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#analytics">
+                        <i class="bi bi-graph-up"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#settings">
+                        <i class="bi bi-gear"></i>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-profile p-3 border-top mt-3">
                 <div class="dropdown">
-                    <button class="btn btn-link text-dark d-flex align-items-center" type="button" id="userMenu" data-bs-toggle="dropdown">
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="32" height="32">
+                    <button class="btn btn-link text-white d-flex align-items-center w-100 p-0" type="button" id="userMenu" data-bs-toggle="dropdown">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=4361ee&color=fff" class="rounded-circle me-2" width="36" height="36">
                         <span class="me-2">Admin</span>
-                        <i class="bi bi-chevron-down"></i>
+                        <i class="bi bi-chevron-up ms-auto"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu dropdown-menu-dark w-100">
                         <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
                         <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -346,50 +385,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <nav class="sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#dashboard">
-                                <i class="bi bi-speedometer2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#servers">
-                                <i class="bi bi-hdd-stack"></i>
-                                Servers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#tools">
-                                <i class="bi bi-tools"></i>
-                                Tools
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#users">
-                                <i class="bi bi-people"></i>
-                                Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#analytics">
-                                <i class="bi bi-graph-up"></i>
-                                Analytics
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#settings">
-                                <i class="bi bi-gear"></i>
-                                Settings
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
             <!-- Main content -->
             <main class="main-content">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
