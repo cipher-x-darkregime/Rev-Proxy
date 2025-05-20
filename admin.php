@@ -592,6 +592,101 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 padding: 1rem 0.7rem 1rem 0.7rem;
             }
         }
+        /* Modern Server Management Section */
+        .server-section {
+            background: #f8fafc;
+            border-radius: 24px;
+            margin-bottom: 2.8rem;
+            padding: 2.2rem 2.2rem 1.2rem 2.2rem;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.04);
+        }
+        .server-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.7rem;
+        }
+        .server-header .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #23283e;
+            letter-spacing: 0.5px;
+        }
+        .server-header .section-title i {
+            font-size: 1.7rem;
+            color: var(--primary-color);
+        }
+        .server-header .btn {
+            font-size: 1.05rem;
+            padding: 0.6rem 1.5rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .server-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.06);
+            border: 1.5px solid #f0f1f6;
+            padding: 0;
+            overflow: hidden;
+            transition: box-shadow 0.18s, border 0.18s, transform 0.18s;
+        }
+        .server-card:hover {
+            box-shadow: 0 8px 24px rgba(67,97,238,0.10);
+            border: 1.5px solid var(--primary-color);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .server-card .card-body {
+            padding: 1.5rem 2rem 1.5rem 2rem;
+        }
+        .server-table th, .server-table td {
+            border: none;
+            padding: 1.05rem 1.1rem;
+            vertical-align: middle;
+        }
+        .server-table th {
+            background: #f6f8fb;
+            color: #23283e;
+            font-weight: 700;
+            font-size: 1.03rem;
+        }
+        .server-table tbody tr {
+            background: #fff;
+            border-radius: 12px;
+        }
+        .server-table tbody tr:hover {
+            background: #f2f6fc;
+        }
+        .server-table .badge {
+            font-size: 0.92rem;
+            border-radius: 7px;
+            padding: 0.28em 0.7em;
+            font-weight: 500;
+            background: #f2f6fc;
+            color: var(--primary-color);
+            border: none;
+        }
+        .server-table .badge.text-success {
+            color: #1b7c4a;
+            background: #e6f9f0;
+        }
+        .server-table .btn {
+            border-radius: 999px !important;
+            font-size: 0.98rem;
+            padding: 0.4rem 1.1rem;
+        }
+        @media (max-width: 767.98px) {
+            .server-section {
+                padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+            }
+            .server-card .card-body {
+                padding: 1rem 0.7rem 1rem 0.7rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -704,18 +799,18 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 <?php endif; ?>
 
                 <!-- Server Management Section -->
-                <div class="section-block">
-                    <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                    <div class="mgmt-card mb-4">
-                        <div class="card-header d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-plus-lg me-1"></i>
-                                Add Server
-                            </button>
-                        </div>
+                <div class="server-section">
+                    <div class="server-header">
+                        <div class="section-title"><i class="bi bi-hdd-stack"></i> Server Management</div>
+                        <button class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add Server
+                        </button>
+                    </div>
+                    <div class="server-card mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table mgmt-table align-middle">
+                                <table class="table server-table align-middle">
                                     <thead>
                                         <tr>
                                             <th>Server Name</th>
