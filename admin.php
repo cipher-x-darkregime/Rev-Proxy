@@ -1404,6 +1404,17 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             mainContent.classList.toggle('sidebar-collapsed-main');
         });
 
+        // Remove modal backdrop when modal is closed
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToolModal = document.getElementById('addToolModal');
+            addToolModal.addEventListener('hidden.bs.modal', function() {
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            });
+        });
+
         // Management section switching
         function showSection(sectionId) {
             document.querySelectorAll('.dashboard-section, .tools-section, .servers-section, .users-section, .logs-section').forEach(sec => sec.classList.remove('active'));
