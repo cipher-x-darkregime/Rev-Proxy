@@ -1523,13 +1523,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             popup.style.fontWeight = '500';
             popup.style.fontSize = '1rem';
             popup.style.animation = 'fadeIn 0.3s ease-in-out';
-            popup.innerHTML = `
-                <span>${message}</span>
-                <button type="button" class="btn-close" aria-label="Close" style="margin-left: 10px;"></button>
-            `;
+            popup.innerHTML = `<span>${message}</span>`;
             document.body.appendChild(popup);
             setTimeout(() => {
-                popup.style.right = '20px';
+                popup.style.right = '0';
             }, 10);
             setTimeout(() => {
                 popup.style.right = '-300px';
@@ -1537,12 +1534,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     popup.remove();
                 }, 300);
             }, 3000);
-            popup.querySelector('.btn-close').addEventListener('click', () => {
-                popup.style.right = '-300px';
-                setTimeout(() => {
-                    popup.remove();
-                }, 300);
-            });
         }
 
         // Add animation keyframes
