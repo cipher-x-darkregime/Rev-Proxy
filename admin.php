@@ -1420,8 +1420,16 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     let show = true;
                     Array.from(row.cells).forEach((cell, idx) => {
                         const filterVal = filterValues[idx];
-                        if (filterVal && !cell.textContent.toLowerCase().includes(filterVal)) {
-                            show = false;
+                        if (filterVal) {
+                            let cellText = cell.textContent.toLowerCase();
+                            // Special handling for status column (index 2)
+                            if (formId === 'tools-filter' && idx === 2) {
+                                const badge = cell.querySelector('.badge');
+                                if (badge) cellText = badge.textContent.toLowerCase();
+                            }
+                            if (!cellText.includes(filterVal)) {
+                                show = false;
+                            }
                         }
                     });
                     row.style.display = show ? '' : 'none';
