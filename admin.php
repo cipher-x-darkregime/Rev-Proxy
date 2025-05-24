@@ -1122,7 +1122,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="addToolModalLabel">Add New Tool</h5>
+                                        <h5 class="modal-title" id="addToolModalLabel">Add Tool</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -1154,7 +1154,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" id="saveToolBtn">Save Tool</button>
+                                        <button type="button" class="btn btn-primary" id="addToolButton">Add Tool</button>
                                     </div>
                                 </div>
                             </div>
