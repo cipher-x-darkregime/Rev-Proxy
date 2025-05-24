@@ -1361,7 +1361,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     <div class="mb-3">
                                         <label for="toolName" class="form-label">Tool Name</label>
                                         <input type="text" class="form-control" id="toolName" required>
-                                        <div class="invalid-feedback">Tool Name is required.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="toolStatus" class="form-label">Status</label>
@@ -1369,22 +1368,18 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <option value="Active" selected>Active</option>
                                             <option value="Inactive">Inactive</option>
                                         </select>
-                                        <div class="invalid-feedback">Status is required.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="toolDomain" class="form-label">Domain (Sub-domain)</label>
                                         <input type="text" class="form-control" id="toolDomain" required>
-                                        <div class="invalid-feedback">Domain is required.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="toolDirectory" class="form-label">Directory for Domain</label>
                                         <input type="text" class="form-control" id="toolDirectory" required>
-                                        <div class="invalid-feedback">Directory is required.</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="toolLimit" class="form-label">Limit per User</label>
                                         <input type="number" class="form-control" id="toolLimit" value="5" min="1" required>
-                                        <div class="invalid-feedback">Limit per User is required.</div>
                                     </div>
                                 </form>
                             </div>
@@ -1418,8 +1413,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 if (backdrop) {
                     backdrop.remove();
                 }
-                // Reset the form when modal is closed
-                document.getElementById('addToolForm').reset();
             });
         });
 
@@ -1509,6 +1502,30 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         setupTableFilter('tools-filter', 'tools-table');
         setupTableFilter('servers-filter', 'servers-table');
+
+        // Add Tool form validation
+        document.getElementById('addToolButton').addEventListener('click', function() {
+            const toolName = document.getElementById('toolName').value.trim();
+            const toolStatus = document.getElementById('toolStatus').value;
+            const toolDomain = document.getElementById('toolDomain').value.trim();
+            const toolDirectory = document.getElementById('toolDirectory').value.trim();
+            const toolLimit = document.getElementById('toolLimit').value.trim();
+
+            if (!toolName || !toolStatus || !toolDomain || !toolDirectory || !toolLimit) {
+                alert('All fields are required.');
+                return;
+            }
+
+            // If all fields are filled, proceed to add the tool
+            // For now, just close the modal
+            const addToolModal = bootstrap.Modal.getInstance(document.getElementById('addToolModal'));
+            addToolModal.hide();
+        });
+
+        // Reset form when modal is closed
+        document.getElementById('addToolModal').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('addToolForm').reset();
+        });
     </script>
 </body>
 </html> 
