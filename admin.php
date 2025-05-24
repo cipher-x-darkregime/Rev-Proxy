@@ -1512,7 +1512,18 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             const toolLimit = document.getElementById('toolLimit').value.trim();
 
             if (!toolName || !toolStatus || !toolDomain || !toolDirectory || !toolLimit) {
-                alert('All fields are required.');
+                // Show error popup instead of alert
+                const errorPopup = document.createElement('div');
+                errorPopup.className = 'alert alert-danger';
+                errorPopup.style.position = 'fixed';
+                errorPopup.style.top = '20px';
+                errorPopup.style.left = '20px';
+                errorPopup.style.zIndex = '9999';
+                errorPopup.textContent = 'All fields are required.';
+                document.body.appendChild(errorPopup);
+                setTimeout(() => {
+                    errorPopup.remove();
+                }, 3000);
                 return;
             }
 
