@@ -1568,6 +1568,9 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         // Reset form when modal is closed
         document.getElementById('addToolModal').addEventListener('hidden.bs.modal', function() {
             document.getElementById('addToolForm').reset();
+            // Remove any visible showMessage popup
+            const popup = document.querySelector('.alert[style*="fixed"]');
+            if (popup) popup.remove();
         });
     </script>
 </body>
