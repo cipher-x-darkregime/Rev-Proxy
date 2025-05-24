@@ -1423,12 +1423,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         let cellText = cell.textContent.toLowerCase().trim();
                         if (filterVal) {
                             if (idx === 2) { // Status column
-                                // Only match exact status (e.g., 'active' or 'inactive')
-                                if (!cellText == (filterVal)) {
+                                if (cellText !== filterVal) {
                                     show = false;
                                 }
                             } else {
-                                if (!cellText == (filterVal)) {
+                                if (!cellText.includes(filterVal)) {
                                     show = false;
                                 }
                             }
