@@ -1120,7 +1120,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         <form class="filter-bar" id="tools-filter">
                             <input type="text" placeholder="Tool ID" data-filter-col="0">
                             <input type="text" placeholder="Tool Name" data-filter-col="1">
-                            <select data-filter-col="2">
+                            <select data-filter-col="2" name="status">
                                 <option value="">Status</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -1153,6 +1153,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
                                             <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
+                                            <button class="btn btn-warning btn-sm" title="Check Users"><i class="bi bi-people"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1166,6 +1167,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
                                             <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
+                                            <button class="btn btn-warning btn-sm" title="Check Users"><i class="bi bi-people"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1179,6 +1181,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                             <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
                                             <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
+                                            <button class="btn btn-warning btn-sm" title="Check Users"><i class="bi bi-people"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
