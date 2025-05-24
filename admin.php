@@ -1518,6 +1518,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             popup.style.display = 'flex';
             popup.style.alignItems = 'center';
             popup.style.justifyContent = 'space-between';
+            popup.style.background = 'linear-gradient(135deg, #f8f9fa, #e9ecef)';
+            popup.style.color = '#212529';
+            popup.style.fontWeight = '500';
+            popup.style.fontSize = '1rem';
+            popup.style.animation = 'fadeIn 0.3s ease-in-out';
             popup.innerHTML = `
                 <span>${message}</span>
                 <button type="button" class="btn-close" aria-label="Close" style="margin-left: 10px;"></button>
@@ -1539,6 +1544,16 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 }, 300);
             });
         }
+
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
 
         // Add Tool form validation
         document.getElementById('addToolButton').addEventListener('click', function() {
