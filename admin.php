@@ -1512,7 +1512,16 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             popup.style.right = '-300px';
             popup.style.zIndex = '9999';
             popup.style.transition = 'right 0.3s ease-in-out';
-            popup.textContent = message;
+            popup.style.padding = '15px 20px';
+            popup.style.borderRadius = '8px';
+            popup.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            popup.style.display = 'flex';
+            popup.style.alignItems = 'center';
+            popup.style.justifyContent = 'space-between';
+            popup.innerHTML = `
+                <span>${message}</span>
+                <button type="button" class="btn-close" aria-label="Close" style="margin-left: 10px;"></button>
+            `;
             document.body.appendChild(popup);
             setTimeout(() => {
                 popup.style.right = '20px';
@@ -1523,6 +1532,12 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     popup.remove();
                 }, 300);
             }, 3000);
+            popup.querySelector('.btn-close').addEventListener('click', () => {
+                popup.style.right = '-300px';
+                setTimeout(() => {
+                    popup.remove();
+                }, 300);
+            });
         }
 
         // Add Tool form validation
