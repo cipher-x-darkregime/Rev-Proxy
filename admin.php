@@ -1149,9 +1149,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         <td>3</td>
                                         <td>87</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Server"><i class="bi bi-hdd-stack"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Configure"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1161,9 +1162,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         <td>1</td>
                                         <td>34</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Server"><i class="bi bi-hdd-stack"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Configure"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1173,9 +1175,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                         <td>5</td>
                                         <td>120</td>
                                         <td>
-                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Server"><i class="bi bi-hdd-stack"></i></button>
+                                            <button class="btn btn-outline-primary btn-sm" title="Configure"><i class="bi bi-gear"></i></button>
+                                            <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
+                                            <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
