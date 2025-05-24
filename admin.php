@@ -1358,6 +1358,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             </div>
                             <div class="modal-body">
                                 <form id="addToolForm">
+                                    <div id="addToolError" class="alert alert-danger d-none" role="alert"></div>
                                     <div class="mb-3">
                                         <label for="toolName" class="form-label">Tool Name</label>
                                         <input type="text" class="form-control" id="toolName" required>
@@ -1365,7 +1366,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     <div class="mb-3">
                                         <label for="toolStatus" class="form-label">Status</label>
                                         <select class="form-select" id="toolStatus" required>
-                                            <option value="Active">Active</option>
+                                            <option value="Active" selected>Active</option>
                                             <option value="Inactive">Inactive</option>
                                         </select>
                                     </div>
@@ -1502,6 +1503,28 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         }
         setupTableFilter('tools-filter', 'tools-table');
         setupTableFilter('servers-filter', 'servers-table');
+
+        // Add Tool form validation
+        document.getElementById('addToolButton').onclick = function() {
+            var name = document.getElementById('toolName').value.trim();
+            var status = document.getElementById('toolStatus').value.trim();
+            var domain = document.getElementById('toolDomain').value.trim();
+            var dir = document.getElementById('toolDirectory').value.trim();
+            var limit = document.getElementById('toolLimit').value.trim();
+            var errorDiv = document.getElementById('addToolError');
+            if (!name || !status || !domain || !dir || !limit) {
+                errorDiv.textContent = 'All fields are required.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+            errorDiv.classList.add('d-none');
+            // Here you would normally submit the form via AJAX or similar
+            // For now, just close the modal
+            var modal = bootstrap.Modal.getInstance(document.getElementById('addToolModal'));
+            modal.hide();
+            document.getElementById('addToolForm').reset();
+            document.getElementById('toolStatus').value = 'Active';
+        };
     </script>
 </body>
 </html> 
