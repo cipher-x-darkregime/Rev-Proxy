@@ -1503,6 +1503,28 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         setupTableFilter('tools-filter', 'tools-table');
         setupTableFilter('servers-filter', 'servers-table');
 
+        // Universal message popup function
+        function showMessage(message, type = 'danger') {
+            const popup = document.createElement('div');
+            popup.className = `alert alert-${type}`;
+            popup.style.position = 'fixed';
+            popup.style.top = '20px';
+            popup.style.right = '-300px';
+            popup.style.zIndex = '9999';
+            popup.style.transition = 'right 0.3s ease-in-out';
+            popup.textContent = message;
+            document.body.appendChild(popup);
+            setTimeout(() => {
+                popup.style.right = '20px';
+            }, 10);
+            setTimeout(() => {
+                popup.style.right = '-300px';
+                setTimeout(() => {
+                    popup.remove();
+                }, 300);
+            }, 3000);
+        }
+
         // Add Tool form validation
         document.getElementById('addToolButton').addEventListener('click', function() {
             const toolName = document.getElementById('toolName').value.trim();
@@ -1512,18 +1534,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             const toolLimit = document.getElementById('toolLimit').value.trim();
 
             if (!toolName || !toolStatus || !toolDomain || !toolDirectory || !toolLimit) {
-                // Show error popup instead of alert
-                const errorPopup = document.createElement('div');
-                errorPopup.className = 'alert alert-danger';
-                errorPopup.style.position = 'fixed';
-                errorPopup.style.top = '20px';
-                errorPopup.style.left = '20px';
-                errorPopup.style.zIndex = '9999';
-                errorPopup.textContent = 'All fields are required.';
-                document.body.appendChild(errorPopup);
-                setTimeout(() => {
-                    errorPopup.remove();
-                }, 3000);
+                showMessage('All fields are required.');
                 return;
             }
 
