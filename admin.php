@@ -1122,8 +1122,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             <input type="text" placeholder="Tool Name" data-filter-col="1">
                             <select data-filter-col="2" name="status">
                                 <option value="">Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
                             </select>
                             <input type="number" placeholder="Servers" data-filter-col="3" min="0">
                             <input type="number" placeholder="Users" data-filter-col="4" min="0">
@@ -1415,13 +1415,23 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             if (!form || !table) return;
             const inputs = form.querySelectorAll('[data-filter-col]');
             form.addEventListener('input', function() {
-                const filterValues = Array.from(inputs).map(input => input.value.toLowerCase());
+                const filterValues = Array.from(inputs).map(input => input.value.toLowerCase().trim());
                 Array.from(table.tBodies[0].rows).forEach(row => {
                     let show = true;
                     Array.from(row.cells).forEach((cell, idx) => {
                         const filterVal = filterValues[idx];
-                        if (filterVal && !cell.textContent.toLowerCase().includes(filterVal)) {
-                            show = false;
+                        let cellText = cell.textContent.toLowerCase().trim();
+                        if (filterVal) {
+                            if (idx === 2) { // Status column
+                                // Only match exact status (e.g., 'active' or 'inactive')
+                                if (!cellText.includes(filterVal)) {
+                                    show = false;
+                                }
+                            } else {
+                                if (!cellText.includes(filterVal)) {
+                                    show = false;
+                                }
+                            }
                         }
                     });
                     row.style.display = show ? '' : 'none';
