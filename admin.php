@@ -1424,11 +1424,11 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                         if (filterVal) {
                             if (idx === 2) { // Status column
                                 // Only match exact status (e.g., 'active' or 'inactive')
-                                if (!cellText.includes(filterVal)) {
+                                if (!cellText == (filterVal)) {
                                     show = false;
                                 }
                             } else {
-                                if (!cellText.includes(filterVal)) {
+                                if (!cellText == (filterVal)) {
                                     show = false;
                                 }
                             }
