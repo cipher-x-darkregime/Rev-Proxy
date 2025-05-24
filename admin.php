@@ -1122,8 +1122,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             <input type="text" placeholder="Tool Name" data-filter-col="1">
                             <select data-filter-col="2" name="status">
                                 <option value="">Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
                             </select>
                             <input type="number" placeholder="Servers" data-filter-col="3" min="0">
                             <input type="number" placeholder="Users" data-filter-col="4" min="0">
@@ -1420,16 +1420,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     let show = true;
                     Array.from(row.cells).forEach((cell, idx) => {
                         const filterVal = filterValues[idx];
-                        if (filterVal) {
-                            let cellText = cell.textContent.toLowerCase();
-                            // Special handling for status column (index 2)
-                            if (formId === 'tools-filter' && idx === 2) {
-                                const badge = cell.querySelector('.badge');
-                                if (badge) cellText = badge.textContent.toLowerCase();
-                            }
-                            if (!cellText.includes(filterVal)) {
-                                show = false;
-                            }
+                        if (filterVal && !cell.textContent.toLowerCase().includes(filterVal)) {
+                            show = false;
                         }
                     });
                     row.style.display = show ? '' : 'none';
