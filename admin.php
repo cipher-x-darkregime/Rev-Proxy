@@ -1426,6 +1426,10 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 if (cellText !== filterVal) {
                                     show = false;
                                 }
+                            } else if (idx === 3 || idx === 4) { // Servers and Users columns
+                                if (cellText !== filterVal) {
+                                    show = false;
+                                }
                             } else {
                                 if (!cellText.includes(filterVal)) {
                                     show = false;
