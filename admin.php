@@ -1117,48 +1117,6 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 Add Tool
                             </button>
                         </div>
-                        <!-- Add Tool Modal -->
-                        <div class="modal fade" id="addToolModal" tabindex="-1" aria-labelledby="addToolModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="addToolModalLabel">Add Tool</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="addToolForm">
-                                            <div class="mb-3">
-                                                <label for="toolName" class="form-label">Tool Name</label>
-                                                <input type="text" class="form-control" id="toolName" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="toolStatus" class="form-label">Status</label>
-                                                <select class="form-select" id="toolStatus" required>
-                                                    <option value="Active">Active</option>
-                                                    <option value="Inactive">Inactive</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="toolDomain" class="form-label">Domain (Sub-domain)</label>
-                                                <input type="text" class="form-control" id="toolDomain" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="toolDirectory" class="form-label">Directory for Domain</label>
-                                                <input type="text" class="form-control" id="toolDirectory" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="toolLimit" class="form-label">Limit per User</label>
-                                                <input type="number" class="form-control" id="toolLimit" value="5" min="1" required>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" id="addToolButton">Add Tool</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <form class="filter-bar" id="tools-filter">
                             <input type="text" placeholder="Tool ID" data-filter-col="0">
                             <input type="text" placeholder="Tool Name" data-filter-col="1">
@@ -1386,6 +1344,49 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Tool Modal -->
+                <div class="modal fade" id="addToolModal" tabindex="-1" aria-labelledby="addToolModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addToolModalLabel">Add Tool</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addToolForm">
+                                    <div class="mb-3">
+                                        <label for="toolName" class="form-label">Tool Name</label>
+                                        <input type="text" class="form-control" id="toolName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="toolStatus" class="form-label">Status</label>
+                                        <select class="form-select" id="toolStatus" required>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="toolDomain" class="form-label">Domain (Sub-domain)</label>
+                                        <input type="text" class="form-control" id="toolDomain" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="toolDirectory" class="form-label">Directory for Domain</label>
+                                        <input type="text" class="form-control" id="toolDirectory" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="toolLimit" class="form-label">Limit per User</label>
+                                        <input type="number" class="form-control" id="toolLimit" value="5" min="1" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="addToolButton">Add Tool</button>
+                            </div>
                         </div>
                     </div>
                 </div>
