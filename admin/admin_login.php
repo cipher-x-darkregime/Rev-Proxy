@@ -1,8 +1,8 @@
 <?php
-require_once 'config.php';
+require_once __DIR__ . '/../core/config.php';
 
 if (isset($_SESSION['user_id']) && $_SESSION['user_type'] === 'admin') {
-    header('Location: admin.php');
+    header('Location: admin_dashboard.php');
     exit();
 }
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Log the login activity
             logActivity($user['id'], 'Login', 'Successful admin login');
             
-            header('Location: admin.php');
+            header('Location: admin_dashboard.php');
             exit();
         } else {
             $error = 'Invalid username or password';

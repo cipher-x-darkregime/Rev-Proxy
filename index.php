@@ -1,4 +1,4 @@
 <?php
-header('Location: user_login.php');
+header('Location: users/user_login.php');
 exit();
 ?> 

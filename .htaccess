@@ -6,10 +6,10 @@ RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Redirect root to user login
-RewriteRule ^$ user_login.php [L]
+RewriteRule ^$ users/user_login.php [L]
 
 # Protect sensitive files
-<FilesMatch "^(config\.php|database\.sql)$">
+<FilesMatch "^(core/config\.php|database/database\.sql)$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
@@ -49,6 +49,6 @@ Options -Indexes
 </Files>
 
 # Custom error pages
-ErrorDocument 403 /error.php
-ErrorDocument 404 /error.php
-ErrorDocument 500 /error.php 
+ErrorDocument 403 /core/error.php
+ErrorDocument 404 /core/error.php
+ErrorDocument 500 /core/error.php 
