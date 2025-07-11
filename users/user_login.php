@@ -9,7 +9,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_type'] === 'user') {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $username = htmlspecialchars(trim($_POST['username'] ?? ''), ENT_QUOTES, 'UTF-8');
     $password = $_POST['password'];
 
     if (empty($username) || empty($password)) {
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
             <div class="text-center mt-3">
-                <a href="/Rev-Proxy/admin" class="text-decoration-none">Admin Login</a>
+                <a href="../admin/admin_login.php" class="text-decoration-none">Admin Login</a>
             </div>
         </div>
     </div>

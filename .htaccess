@@ -5,18 +5,8 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Clean URL rewrites
-RewriteRule ^login/?$ /Rev-Proxy/users/user_login.php [L]
-RewriteRule ^admin/?$ /Rev-Proxy/admin/admin_login.php [L]
-RewriteRule ^dashboard/?$ /Rev-Proxy/admin/admin_dashboard.php [L]
-RewriteRule ^tools/?$ /Rev-Proxy/admin/admin_tools.php [L]
-RewriteRule ^servers/?$ /Rev-Proxy/admin/admin_servers.php [L]
-RewriteRule ^users/?$ /Rev-Proxy/admin/admin_users.php [L]
-RewriteRule ^logs/?$ /Rev-Proxy/admin/admin_logs.php [L]
-RewriteRule ^logout/?$ /Rev-Proxy/users/logout.php [L]
-
 # Redirect root to user login
-RewriteRule ^$ /Rev-Proxy/login [L,R=302]
+RewriteRule ^$ /Rev-Proxy/users/user_login.php [L,R=302]
 
 # Protect sensitive files
 <FilesMatch "^(core/config\.php|database/database\.sql)$">
