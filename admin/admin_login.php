@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../core/config.php';
 
 if (isset($_SESSION['user_id']) && $_SESSION['user_type'] === 'admin') {
-    header('Location: admin_dashboard.php');
+    header('Location: /Rev-Proxy/dashboard');
     exit();
 }
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Log the login activity
             logActivity($user['id'], 'Login', 'Successful admin login');
             
-            header('Location: admin_dashboard.php');
+            header('Location: /Rev-Proxy/dashboard');
             exit();
         } else {
             $error = 'Invalid username or password';
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
             <div class="text-center mt-3">
-                <a href="user_login.php" class="text-decoration-none">User Login</a>
+                <a href="../users/user_login.php" class="text-decoration-none">User Login</a>
             </div>
         </div>
     </div>

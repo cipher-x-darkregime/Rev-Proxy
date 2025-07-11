@@ -404,31 +404,31 @@ if (!isset($_POST['ajax_action'])) {
             <nav class="sidebar-nav">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_dashboard.php">
+                        <a class="nav-link" href="/Rev-Proxy/dashboard">
                             <i class="bi bi-speedometer2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_tools.php">
+                        <a class="nav-link" href="/Rev-Proxy/tools">
                             <i class="bi bi-tools"></i>
                             Tool Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_servers.php">
+                        <a class="nav-link" href="/Rev-Proxy/servers">
                             <i class="bi bi-hdd-stack"></i>
                             Server Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="admin_users.php">
+                        <a class="nav-link active" href="/Rev-Proxy/users">
                             <i class="bi bi-people"></i>
                             User Management
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_logs.php">
+                        <a class="nav-link" href="/Rev-Proxy/logs">
                             <i class="bi bi-clipboard-data"></i>
                             Activity Logs
                         </a>
@@ -446,7 +446,7 @@ if (!isset($_POST['ajax_action'])) {
                         <p>Administrator</p>
                     </div>
                 </div>
-                <a href="logout.php" class="btn logout-btn">
+                <a href="/Rev-Proxy/logout" class="btn logout-btn">
                     <i class="bi bi-box-arrow-right me-2"></i>
                     Logout
                 </a>
