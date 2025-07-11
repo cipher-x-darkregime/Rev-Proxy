@@ -1,49 +1,364 @@
 <?php
+// Start output buffering to prevent unwanted output in JSON responses
+ob_start();
+
 require_once 'config.php';
 
-// Check if user is logged in and is admin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
-    header('Location: admin_login.php');
+// Suppress deprecation warnings for AJAX requests to prevent JSON corruption
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+}
+
+// Handle AJAX requests for CRUD operations FIRST (before any HTML output)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
+    // Check if user is logged in and is admin for AJAX requests
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
+        exit();
+    }
+    
+    $conn = getDBConnection();
+    $response = array('success' => false, 'message' => '');
+    
+    // Debug logging
+    error_log('AJAX Action: ' . $_POST['ajax_action']);
+    error_log('POST Data: ' . print_r($_POST, true));
+    
+    try {
+        switch ($_POST['ajax_action']) {
+            case 'add_tool':
+                error_log('Processing add_tool case');
+                $name = htmlspecialchars(trim($_POST['tool_name'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $status = htmlspecialchars(trim($_POST['tool_status'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $domain = htmlspecialchars(trim($_POST['tool_domain'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $directory = htmlspecialchars(trim($_POST['tool_directory'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $user_limit = filter_input(INPUT_POST, 'tool_limit', FILTER_VALIDATE_INT);
+                
+                error_log('Filtered values: ' . print_r([
+                    'name' => $name,
+                    'status' => $status,
+                    'domain' => $domain,
+                    'directory' => $directory,
+                    'user_limit' => $user_limit
+                ], true));
+                
+                if (empty($name) || empty($status) || empty($domain) || empty($directory) || $user_limit === false) {
+                    $response['message'] = 'All fields are required and must be valid';
+                    error_log('Validation failed: ' . $response['message']);
+                } else {
+                    try {
+                        $stmt = $conn->prepare('INSERT INTO tools (name, status, domain, directory, user_limit, created_by) VALUES (?, ?, ?, ?, ?, ?)');
+                        $stmt->execute([$name, $status, $domain, $directory, $user_limit, $_SESSION['user_id']]);
+                        
+                        logActivity($_SESSION['user_id'], 'Added Tool', "Tool: $name");
+                        $response['success'] = true;
+                        $response['message'] = 'Tool added successfully';
+                        error_log('Tool added successfully');
+                    } catch (Exception $e) {
+                        error_log('Database error: ' . $e->getMessage());
+                        $response['message'] = 'Database error: ' . $e->getMessage();
+                    }
+                }
+                break;
+                
+            case 'delete_tool':
+                $tool_id = filter_input(INPUT_POST, 'tool_id', FILTER_VALIDATE_INT);
+                $force_delete = isset($_POST['force_delete']) && $_POST['force_delete'] === 'true';
+                
+                if ($tool_id) {
+                    // Check if tool has associated servers
+                    $stmt = $conn->prepare('SELECT COUNT(*) FROM servers WHERE tool_id = ?');
+                    $stmt->execute([$tool_id]);
+                    $server_count = $stmt->fetchColumn();
+                    
+                    if ($server_count > 0 && !$force_delete) {
+                        $response['message'] = "Cannot delete tool: It has $server_count associated server(s). Please delete the servers first or use force delete.";
+                    } else {
+                        // Get tool name for logging
+                        $stmt = $conn->prepare('SELECT name FROM tools WHERE id = ?');
+                        $stmt->execute([$tool_id]);
+                        $tool_name = $stmt->fetchColumn();
+                        
+                        if ($force_delete && $server_count > 0) {
+                            // Delete associated servers first
+                            $stmt = $conn->prepare('DELETE FROM servers WHERE tool_id = ?');
+                            $stmt->execute([$tool_id]);
+                            logActivity($_SESSION['user_id'], 'Force Deleted Tool', "Tool: $tool_name (with $server_count servers)");
+                        } else {
+                            logActivity($_SESSION['user_id'], 'Deleted Tool', "Tool: $tool_name");
+                        }
+                        
+                        $stmt = $conn->prepare('DELETE FROM tools WHERE id = ?');
+                        $stmt->execute([$tool_id]);
+                        
+                        $response['success'] = true;
+                        $response['message'] = $force_delete ? "Tool and $server_count associated server(s) deleted successfully" : 'Tool deleted successfully';
+                    }
+                } else {
+                    $response['message'] = 'Invalid tool ID';
+                }
+                break;
+                
+            case 'add_server':
+                $name = htmlspecialchars(trim($_POST['server_name'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $status = htmlspecialchars(trim($_POST['server_status'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $tool_id = filter_input(INPUT_POST, 'tool_id', FILTER_VALIDATE_INT);
+                $start_date = htmlspecialchars(trim($_POST['start_date'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $end_date = htmlspecialchars(trim($_POST['end_date'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $max_users = filter_input(INPUT_POST, 'max_users', FILTER_VALIDATE_INT);
+                
+                if (empty($name) || empty($status) || empty($tool_id) || $max_users === false) {
+                    $response['message'] = 'Required fields are missing or invalid';
+                } else {
+                    $stmt = $conn->prepare('INSERT INTO servers (name, status, tool_id, start_date, end_date, max_users, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)');
+                    $stmt->execute([$name, $status, $tool_id, $start_date, $end_date, $max_users, $_SESSION['user_id']]);
+                    
+                    logActivity($_SESSION['user_id'], 'Added Server', "Server: $name");
+                    $response['success'] = true;
+                    $response['message'] = 'Server added successfully';
+                }
+                break;
+                
+            case 'delete_server':
+                $server_id = filter_input(INPUT_POST, 'server_id', FILTER_VALIDATE_INT);
+                if ($server_id) {
+                    // Check if server has associated users
+                    $stmt = $conn->prepare('SELECT COUNT(*) FROM server_users WHERE server_id = ?');
+                    $stmt->execute([$server_id]);
+                    $user_count = $stmt->fetchColumn();
+                    
+                    if ($user_count > 0) {
+                        $response['message'] = "Cannot delete server: It has $user_count associated user(s). Please remove users from server first.";
+                    } else {
+                        // Get server name for logging
+                        $stmt = $conn->prepare('SELECT name FROM servers WHERE id = ?');
+                        $stmt->execute([$server_id]);
+                        $server_name = $stmt->fetchColumn();
+                        
+                        $stmt = $conn->prepare('DELETE FROM servers WHERE id = ?');
+                        $stmt->execute([$server_id]);
+                        
+                        logActivity($_SESSION['user_id'], 'Deleted Server', "Server: $server_name");
+                        $response['success'] = true;
+                        $response['message'] = 'Server deleted successfully';
+                    }
+                } else {
+                    $response['message'] = 'Invalid server ID';
+                }
+                break;
+                
+            case 'add_user':
+                $username = htmlspecialchars(trim($_POST['username'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+                $password = $_POST['password'];
+                $user_type = htmlspecialchars(trim($_POST['user_type'] ?? ''), ENT_QUOTES, 'UTF-8');
+                
+                if (empty($username) || empty($email) || empty($password) || empty($user_type)) {
+                    $response['message'] = 'All fields are required';
+                } else {
+                    // Check if username or email already exists
+                    $stmt = $conn->prepare('SELECT id FROM users WHERE username = ? OR email = ?');
+                    $stmt->execute([$username, $email]);
+                    if ($stmt->fetch()) {
+                        $response['message'] = 'Username or email already exists';
+                    } else {
+                        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                        $stmt = $conn->prepare('INSERT INTO users (username, email, password, user_type) VALUES (?, ?, ?, ?)');
+                        $stmt->execute([$username, $email, $hashed_password, $user_type]);
+                        
+                        logActivity($_SESSION['user_id'], 'Added User', "User: $username");
+                        $response['success'] = true;
+                        $response['message'] = 'User added successfully';
+                    }
+                }
+                break;
+                
+            case 'delete_user':
+                $user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+                if ($user_id && $user_id != $_SESSION['user_id']) { // Prevent self-deletion
+                    // Check if user is associated with any servers
+                    $stmt = $conn->prepare('SELECT COUNT(*) FROM server_users WHERE user_id = ?');
+                    $stmt->execute([$user_id]);
+                    $server_count = $stmt->fetchColumn();
+                    
+                    if ($server_count > 0) {
+                        $response['message'] = "Cannot delete user: User is associated with $server_count server(s). Please remove user from servers first.";
+                    } else {
+                        // Get user info for logging
+                        $stmt = $conn->prepare('SELECT username FROM users WHERE id = ?');
+                        $stmt->execute([$user_id]);
+                        $username = $stmt->fetchColumn();
+                        
+                        $stmt = $conn->prepare('DELETE FROM users WHERE id = ?');
+                        $stmt->execute([$user_id]);
+                        
+                        logActivity($_SESSION['user_id'], 'Deleted User', "User: $username");
+                        $response['success'] = true;
+                        $response['message'] = 'User deleted successfully';
+                    }
+                } else {
+                    $response['message'] = 'Invalid user ID or cannot delete yourself';
+                }
+                break;
+                
+            case 'toggle_tool_status':
+                $tool_id = filter_input(INPUT_POST, 'tool_id', FILTER_VALIDATE_INT);
+                $new_status = htmlspecialchars(trim($_POST['new_status'] ?? ''), ENT_QUOTES, 'UTF-8');
+                
+                if ($tool_id && in_array($new_status, ['active', 'inactive'])) {
+                    $stmt = $conn->prepare('UPDATE tools SET status = ? WHERE id = ?');
+                    $stmt->execute([$new_status, $tool_id]);
+                    
+                    logActivity($_SESSION['user_id'], 'Updated Tool Status', "Tool ID: $tool_id, Status: $new_status");
+                    $response['success'] = true;
+                    $response['message'] = 'Tool status updated successfully';
+                } else {
+                    $response['message'] = 'Invalid tool ID or status';
+                }
+                break;
+                
+            case 'toggle_server_status':
+                $server_id = filter_input(INPUT_POST, 'server_id', FILTER_VALIDATE_INT);
+                $new_status = htmlspecialchars(trim($_POST['new_status'] ?? ''), ENT_QUOTES, 'UTF-8');
+                
+                if ($server_id && in_array($new_status, ['active', 'inactive'])) {
+                    $stmt = $conn->prepare('UPDATE servers SET status = ? WHERE id = ?');
+                    $stmt->execute([$new_status, $server_id]);
+                    
+                    logActivity($_SESSION['user_id'], 'Updated Server Status', "Server ID: $server_id, Status: $new_status");
+                    $response['success'] = true;
+                    $response['message'] = 'Server status updated successfully';
+                } else {
+                    $response['message'] = 'Invalid server ID or status';
+                }
+                break;
+                
+            default:
+                $response['message'] = 'Invalid action';
+        }
+    } catch (Exception $e) {
+        $response['message'] = 'Error: ' . $e->getMessage();
+    }
+    
+    // Clean any output buffer to prevent unwanted output
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
+    
+    header('Content-Type: application/json');
+    echo json_encode($response);
     exit();
 }
 
-$conn = getDBConnection();
-$message = '';
-$error = '';
+// Main page logic (only if not AJAX request)
+if (!isset($_POST['ajax_action'])) {
+    // Check if user is logged in and is admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+        header('Location: admin_login.php');
+        exit();
+    }
 
-// Handle cookie update
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'update_cookies') {
-        $cookie_data = $_POST['cookie_data'];
-        
-        if (!empty($cookie_data)) {
-            try {
-                // Validate JSON
-                json_decode($cookie_data);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    $stmt = $conn->prepare('INSERT INTO cookies (cookie_data, updated_by) VALUES (?, ?)');
-                    $stmt->execute([$cookie_data, $_SESSION['user_id']]);
-                    $message = 'Cookies updated successfully';
-                } else {
-                    $error = 'Invalid JSON format';
+    $conn = getDBConnection();
+    $message = '';
+    $error = '';
+
+    // Handle cookie update
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+        if ($_POST['action'] === 'update_cookies') {
+            $cookie_data = $_POST['cookie_data'];
+            
+            if (!empty($cookie_data)) {
+                try {
+                    // Validate JSON
+                    json_decode($cookie_data);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $stmt = $conn->prepare('INSERT INTO cookies (cookie_data, updated_by) VALUES (?, ?)');
+                        $stmt->execute([$cookie_data, $_SESSION['user_id']]);
+                        $message = 'Cookies updated successfully';
+                        logActivity($_SESSION['user_id'], 'Updated Cookies', 'Cookie data updated');
+                    } else {
+                        $error = 'Invalid JSON format';
+                    }
+                } catch (Exception $e) {
+                    $error = 'Error updating cookies: ' . $e->getMessage();
                 }
-            } catch (Exception $e) {
-                $error = 'Error updating cookies: ' . $e->getMessage();
+            } else {
+                $error = 'Cookie data cannot be empty';
             }
-        } else {
-            $error = 'Cookie data cannot be empty';
         }
     }
-}
 
-// Get latest cookie data
-$stmt = $conn->query('SELECT cookie_data, updated_at FROM cookies ORDER BY updated_at DESC LIMIT 1');
-$latest_cookies = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Get latest cookie data
+    $stmt = $conn->query('SELECT cookie_data, updated_at FROM cookies ORDER BY updated_at DESC LIMIT 1');
+    $latest_cookies = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get server statistics
 $total_users = $conn->query('SELECT COUNT(*) FROM users WHERE user_type = "user"')->fetchColumn();
 $total_admins = $conn->query('SELECT COUNT(*) FROM users WHERE user_type = "admin"')->fetchColumn();
 $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
+$total_tools = $conn->query('SELECT COUNT(*) FROM tools')->fetchColumn();
+$total_servers = $conn->query('SELECT COUNT(*) FROM servers')->fetchColumn();
+
+// Get tools data
+$tools_query = $conn->query('
+    SELECT t.id, t.name, t.status, 
+           COUNT(DISTINCT s.id) as server_count,
+           COUNT(DISTINCT su.user_id) as user_count
+    FROM tools t
+    LEFT JOIN servers s ON t.id = s.tool_id
+    LEFT JOIN server_users su ON s.id = su.server_id
+    GROUP BY t.id, t.name, t.status
+    ORDER BY t.id
+');
+$tools_data = $tools_query->fetchAll(PDO::FETCH_ASSOC);
+
+// Get servers data
+$servers_query = $conn->query('
+    SELECT s.id, s.name, s.status, s.current_users, s.start_date, s.end_date,
+           t.name as tool_name
+    FROM servers s
+    LEFT JOIN tools t ON s.tool_id = t.id
+    ORDER BY s.id
+');
+$servers_data = $servers_query->fetchAll(PDO::FETCH_ASSOC);
+
+// Get users data
+try {
+    $users_query = $conn->query('
+        SELECT id, username, email, user_type, status, last_login
+        FROM users
+        ORDER BY id
+    ');
+    $users_data = $users_query->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // If status column doesn't exist, get users without status
+    if (strpos($e->getMessage(), 'status') !== false) {
+        $users_query = $conn->query('
+            SELECT id, username, email, user_type, last_login
+            FROM users
+            ORDER BY id
+        ');
+        $users_data = $users_query->fetchAll(PDO::FETCH_ASSOC);
+        // Add default status for each user
+        foreach ($users_data as &$user) {
+            $user['status'] = 'active';
+        }
+    } else {
+        throw $e;
+    }
+}
+
+// Get activity logs
+$logs_query = $conn->query('
+    SELECT al.created_at, u.username, al.action, al.details
+    FROM activity_logs al
+    LEFT JOIN users u ON al.user_id = u.id
+    ORDER BY al.created_at DESC
+    LIMIT 50
+');
+$logs_data = $logs_query->fetchAll(PDO::FETCH_ASSOC);
+} // End of main page logic
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1084,19 +1399,31 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                 <div class="icon"><i class="bi bi-people"></i></div>
                                 <div class="card-title">Total Users</div>
                                 <div class="card-number"><?php echo $total_users; ?></div>
-                                <span class="badge bg-white text-primary">+12% from last month</span>
+                                <span class="badge bg-white text-primary">Active</span>
                             </div>
-                            <div class="dashboard-card servers">
-                                <div class="icon"><i class="bi bi-hdd-stack"></i></div>
-                                <div class="card-title">Active Servers</div>
-                                <div class="card-number">5</div>
-                                <span class="badge bg-white text-success">All systems operational</span>
+                            <div class="dashboard-card admins">
+                                <div class="icon"><i class="bi bi-shield-check"></i></div>
+                                <div class="card-title">Total Admins</div>
+                                <div class="card-number"><?php echo $total_admins; ?></div>
+                                <span class="badge bg-white text-info">System</span>
+                            </div>
+                            <div class="dashboard-card cookies">
+                                <div class="icon"><i class="bi bi-cookie"></i></div>
+                                <div class="card-title">Total Cookies</div>
+                                <div class="card-number"><?php echo $total_cookies; ?></div>
+                                <span class="badge bg-white text-success">Stored</span>
                             </div>
                             <div class="dashboard-card tools">
                                 <div class="icon"><i class="bi bi-tools"></i></div>
                                 <div class="card-title">Total Tools</div>
-                                <div class="card-number">12</div>
-                                <span class="badge bg-white text-info">3 new this week</span>
+                                <div class="card-number"><?php echo $total_tools; ?></div>
+                                <span class="badge bg-white text-info">Available</span>
+                            </div>
+                            <div class="dashboard-card servers">
+                                <div class="icon"><i class="bi bi-hdd-stack"></i></div>
+                                <div class="card-title">Total Servers</div>
+                                <div class="card-number"><?php echo $total_servers; ?></div>
+                                <span class="badge bg-white text-success">Running</span>
                             </div>
                         </div>
                         <!-- Dashboard Management Buttons -->
@@ -1142,48 +1469,32 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($tools_data as $tool): ?>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Tool Alpha</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>3</td>
-                                        <td>87</td>
+                                        <td><?php echo htmlspecialchars($tool['id']); ?></td>
+                                        <td><?php echo htmlspecialchars($tool['name']); ?></td>
+                                        <td>
+                                            <span class="badge <?php echo $tool['status'] === 'active' ? 'text-success' : 'text-danger'; ?>">
+                                                <?php echo ucfirst(htmlspecialchars($tool['status'])); ?>
+                                            </span>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($tool['server_count']); ?></td>
+                                        <td><?php echo htmlspecialchars($tool['user_count']); ?></td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Configure"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm delete-tool" title="Delete Tool" data-tool-id="<?php echo $tool['id']; ?>"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
                                             <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
                                             <button class="btn btn-warning btn-sm" title="Check Users"><i class="bi bi-people"></i></button>
+                                            <button class="btn btn-<?php echo $tool['status'] === 'active' ? 'success' : 'warning'; ?> btn-sm toggle-tool-status" 
+                                                    title="<?php echo $tool['status'] === 'active' ? 'Deactivate' : 'Activate'; ?> Tool" 
+                                                    data-tool-id="<?php echo $tool['id']; ?>" 
+                                                    data-current-status="<?php echo $tool['status']; ?>">
+                                                <i class="bi bi-<?php echo $tool['status'] === 'active' ? 'check-circle' : 'x-circle'; ?>"></i>
+                                            </button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Tool Beta</td>
-                                        <td><span class="badge text-danger">Inactive</span></td>
-                                        <td>1</td>
-                                        <td>34</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm" title="Configure"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
-                                            <button class="btn btn-warning btn-sm" title="Check Users"><i class="bi bi-people"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Tool Gamma</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>5</td>
-                                        <td>120</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm" title="Configure"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete Tool"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-secondary btn-sm" title="Check Logs"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-info btn-sm" title="Add Server"><i class="bi bi-plus-circle"></i></button>
-                                            <button class="btn btn-warning btn-sm" title="Check Users"><i class="bi bi-people"></i></button>
-                                        </td>
-                                    </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -1193,7 +1504,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     <div class="servers-section" id="servers-management-section">
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-hdd-stack"></i> Server Management</div>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addServerModal">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 Add Server
                             </button>
@@ -1227,36 +1538,32 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($servers_data as $server): ?>
                                     <tr>
-                                        <td>1</td>
-                                        <td class="server-name">Server 1</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>150</td>
-                                        <td>Tool Alpha</td>
-                                        <td>2024-06-01</td>
-                                        <td>2024-12-01</td>
+                                        <td><?php echo htmlspecialchars($server['id']); ?></td>
+                                        <td class="server-name"><?php echo htmlspecialchars($server['name']); ?></td>
+                                        <td>
+                                            <span class="badge <?php echo $server['status'] === 'active' ? 'text-success' : 'text-danger'; ?>">
+                                                <?php echo ucfirst(htmlspecialchars($server['status'])); ?>
+                                            </span>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($server['current_users']); ?></td>
+                                        <td><?php echo htmlspecialchars($server['tool_name'] ?? 'N/A'); ?></td>
+                                        <td><?php echo htmlspecialchars($server['start_date'] ?? 'N/A'); ?></td>
+                                        <td><?php echo htmlspecialchars($server['end_date'] ?? 'N/A'); ?></td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm delete-server" title="Delete Server" data-server-id="<?php echo $server['id']; ?>"><i class="bi bi-trash"></i></button>
                                             <button class="btn btn-secondary btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-dark btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
+                                            <button class="btn btn-<?php echo $server['status'] === 'active' ? 'success' : 'warning'; ?> btn-sm toggle-server-status" 
+                                                    title="<?php echo $server['status'] === 'active' ? 'Deactivate' : 'Activate'; ?> Server" 
+                                                    data-server-id="<?php echo $server['id']; ?>" 
+                                                    data-current-status="<?php echo $server['status']; ?>">
+                                                <i class="bi bi-<?php echo $server['status'] === 'active' ? 'check-circle' : 'x-circle'; ?>"></i>
+                                            </button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td class="server-name">Server 2</td>
-                                        <td><span class="badge text-success">Active</span></td>
-                                        <td>120</td>
-                                        <td>Tool Beta</td>
-                                        <td>2024-05-15</td>
-                                        <td>2024-11-15</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm" title="Settings"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Delete"><i class="bi bi-trash"></i></button>
-                                            <button class="btn btn-secondary btn-sm" title="Logs"><i class="bi bi-clipboard-data"></i></button>
-                                            <button class="btn btn-dark btn-sm" title="Power Off"><i class="bi bi-power"></i></button>
-                                        </td>
-                                    </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -1266,7 +1573,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                     <div class="users-section" id="users-management-section">
                         <div class="section-header-row">
                             <div class="section-header"><i class="bi bi-people"></i> User Management</div>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 Add User
                             </button>
@@ -1283,26 +1590,22 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($users_data as $user): ?>
                                     <tr>
-                                        <td>John Doe</td>
-                                        <td>john@example.com</td>
-                                        <td>Admin</td>
-                                        <td><span class="badge text-success">Active</span></td>
+                                        <td><?php echo htmlspecialchars($user['username']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['email']); ?></td>
+                                        <td><?php echo ucfirst(htmlspecialchars($user['user_type'])); ?></td>
+                                        <td>
+                                            <span class="badge <?php echo $user['status'] === 'active' ? 'text-success' : 'text-danger'; ?>">
+                                                <?php echo ucfirst(htmlspecialchars($user['status'])); ?>
+                                            </span>
+                                        </td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm delete-user" title="Delete User" data-user-id="<?php echo $user['id'] ?? ''; ?>" data-username="<?php echo htmlspecialchars($user['username']); ?>"><i class="bi bi-trash"></i></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Jane Smith</td>
-                                        <td>jane@example.com</td>
-                                        <td>User</td>
-                                        <td><span class="badge text-danger">Inactive</span></td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-gear"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -1324,24 +1627,14 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($logs_data as $log): ?>
                                     <tr>
-                                        <td>2024-06-01 12:34</td>
-                                        <td>John Doe</td>
-                                        <td>Login</td>
-                                        <td>Successful login</td>
+                                        <td><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime($log['created_at']))); ?></td>
+                                        <td><?php echo htmlspecialchars($log['username'] ?? 'Unknown'); ?></td>
+                                        <td><?php echo htmlspecialchars($log['action']); ?></td>
+                                        <td><?php echo htmlspecialchars($log['details'] ?? ''); ?></td>
                                     </tr>
-                                    <tr>
-                                        <td>2024-06-01 12:40</td>
-                                        <td>Jane Smith</td>
-                                        <td>Added Tool</td>
-                                        <td>Tool Alpha</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024-06-01 12:45</td>
-                                        <td>John Doe</td>
-                                        <td>Deleted Server</td>
-                                        <td>Server 2</td>
-                                    </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -1365,8 +1658,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                                     <div class="mb-3">
                                         <label for="toolStatus" class="form-label">Status</label>
                                         <select class="form-select" id="toolStatus" required>
-                                            <option value="Active" selected>Active</option>
-                                            <option value="Inactive">Inactive</option>
+                                            <option value="active" selected>Active</option>
+                                            <option value="inactive">Inactive</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -1386,6 +1679,97 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-primary" id="addToolButton">Add Tool</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Server Modal -->
+                <div class="modal fade" id="addServerModal" tabindex="-1" aria-labelledby="addServerModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addServerModalLabel">Add Server</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addServerForm">
+                                    <div class="mb-3">
+                                        <label for="serverName" class="form-label">Server Name</label>
+                                        <input type="text" class="form-control" id="serverName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="serverStatus" class="form-label">Status</label>
+                                        <select class="form-select" id="serverStatus" required>
+                                            <option value="active" selected>Active</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="serverTool" class="form-label">Tool</label>
+                                        <select class="form-select" id="serverTool" required>
+                                            <option value="">Select a tool</option>
+                                            <?php foreach ($tools_data as $tool): ?>
+                                            <option value="<?php echo $tool['id']; ?>"><?php echo htmlspecialchars($tool['name']); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="startDate" class="form-label">Start Date</label>
+                                        <input type="date" class="form-control" id="startDate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="endDate" class="form-label">End Date</label>
+                                        <input type="date" class="form-control" id="endDate">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="maxUsers" class="form-label">Max Users</label>
+                                        <input type="number" class="form-control" id="maxUsers" value="100" min="1" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="addServerButton">Add Server</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add User Modal -->
+                <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addUserForm">
+                                    <div class="mb-3">
+                                        <label for="newUsername" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="newUsername" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="newEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="newPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newUserType" class="form-label">User Type</label>
+                                        <select class="form-select" id="newUserType" required>
+                                            <option value="user" selected>User</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="addUserButton">Add User</button>
                             </div>
                         </div>
                     </div>
@@ -1462,6 +1846,8 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         // Show dashboard by default
         showSection('dashboard-section');
 
+
+
         // Generic filter function for tables
         function setupTableFilter(formId, tableId) {
             const form = document.getElementById(formId);
@@ -1518,8 +1904,19 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             popup.style.display = 'flex';
             popup.style.alignItems = 'center';
             popup.style.justifyContent = 'space-between';
-            popup.style.background = 'linear-gradient(135deg, #f8f9fa, #e9ecef)';
-            popup.style.color = '#212529';
+            
+            // Set background based on type
+            if (type === 'success') {
+                popup.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+                popup.style.color = '#155724';
+            } else if (type === 'info') {
+                popup.style.background = 'linear-gradient(135deg, #d1ecf1, #bee5eb)';
+                popup.style.color = '#0c5460';
+            } else {
+                popup.style.background = 'linear-gradient(135deg, #f8f9fa, #e9ecef)';
+                popup.style.color = '#212529';
+            }
+            
             popup.style.fontWeight = '500';
             popup.style.fontSize = '1rem';
             popup.style.animation = 'fadeIn 0.3s ease-in-out';
@@ -1546,7 +1943,7 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
         `;
         document.head.appendChild(style);
 
-        // Add Tool form validation
+        // Add Tool form validation and submission
         document.getElementById('addToolButton').addEventListener('click', function() {
             const toolName = document.getElementById('toolName').value.trim();
             const toolStatus = document.getElementById('toolStatus').value;
@@ -1559,10 +1956,44 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
                 return;
             }
 
-            // If all fields are filled, proceed to add the tool
-            // For now, just close the modal
-            const addToolModal = bootstrap.Modal.getInstance(document.getElementById('addToolModal'));
-            addToolModal.hide();
+            // Create form data for AJAX submission
+            const formData = new FormData();
+            formData.append('ajax_action', 'add_tool');
+            formData.append('tool_name', toolName);
+            formData.append('tool_status', toolStatus);
+            formData.append('tool_domain', toolDomain);
+            formData.append('tool_directory', toolDirectory);
+            formData.append('tool_limit', toolLimit);
+
+            // Submit via AJAX
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                return response.text();
+            })
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        showMessage(data.message, 'success');
+                        const addToolModal = bootstrap.Modal.getInstance(document.getElementById('addToolModal'));
+                        addToolModal.hide();
+                        // Reload the page to show updated data
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        showMessage(data.message, 'danger');
+                    }
+                } catch (e) {
+                    showMessage('Server returned invalid response: ' + text.substring(0, 100), 'danger');
+                }
+            })
+            .catch(error => {
+                showMessage('Error submitting form: ' + error.message, 'danger');
+            });
         });
 
         // Reset form when modal is closed
@@ -1571,6 +2002,298 @@ $total_cookies = $conn->query('SELECT COUNT(*) FROM cookies')->fetchColumn();
             // Remove any visible showMessage popup
             const popup = document.querySelector('.alert[style*="fixed"]');
             if (popup) popup.remove();
+        });
+
+        // Add Server form submission
+        document.getElementById('addServerButton').addEventListener('click', function() {
+            const serverName = document.getElementById('serverName').value.trim();
+            const serverStatus = document.getElementById('serverStatus').value;
+            const serverTool = document.getElementById('serverTool').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const maxUsers = document.getElementById('maxUsers').value.trim();
+
+            if (!serverName || !serverStatus || !serverTool || !maxUsers) {
+                showMessage('Required fields are missing.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('ajax_action', 'add_server');
+            formData.append('server_name', serverName);
+            formData.append('server_status', serverStatus);
+            formData.append('tool_id', serverTool);
+            formData.append('start_date', startDate);
+            formData.append('end_date', endDate);
+            formData.append('max_users', maxUsers);
+
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    const addServerModal = bootstrap.Modal.getInstance(document.getElementById('addServerModal'));
+                    addServerModal.hide();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showMessage(data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showMessage('Error submitting form: ' + error.message, 'danger');
+            });
+        });
+
+        // Add User form submission
+        document.getElementById('addUserButton').addEventListener('click', function() {
+            const username = document.getElementById('newUsername').value.trim();
+            const email = document.getElementById('newEmail').value.trim();
+            const password = document.getElementById('newPassword').value;
+            const userType = document.getElementById('newUserType').value;
+
+            if (!username || !email || !password || !userType) {
+                showMessage('All fields are required.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('ajax_action', 'add_user');
+            formData.append('username', username);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('user_type', userType);
+
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    const addUserModal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+                    addUserModal.hide();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showMessage(data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showMessage('Error submitting form: ' + error.message, 'danger');
+            });
+        });
+
+        // Delete Tool functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.delete-tool')) {
+                const button = e.target.closest('.delete-tool');
+                const toolId = button.getAttribute('data-tool-id');
+                
+                if (confirm('Are you sure you want to delete this tool? This action cannot be undone.')) {
+                    const formData = new FormData();
+                    formData.append('ajax_action', 'delete_tool');
+                    formData.append('tool_id', toolId);
+
+                    fetch(window.location.href, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            // If deletion failed due to dependencies, offer force delete
+                            if (data.message.includes('associated server(s)')) {
+                                if (confirm('This tool has associated servers. Do you want to force delete the tool and all its servers?')) {
+                                    const forceFormData = new FormData();
+                                    forceFormData.append('ajax_action', 'delete_tool');
+                                    forceFormData.append('tool_id', toolId);
+                                    forceFormData.append('force_delete', 'true');
+
+                                    fetch(window.location.href, {
+                                        method: 'POST',
+                                        body: forceFormData
+                                    })
+                                    .then(response => response.json())
+                                    .then(forceData => {
+                                        if (forceData.success) {
+                                            showMessage(forceData.message, 'success');
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 1000);
+                                        } else {
+                                            showMessage(forceData.message, 'danger');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        showMessage('Error force deleting tool: ' + error.message, 'danger');
+                                    });
+                                }
+                            } else {
+                                showMessage(data.message, 'danger');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Error deleting tool: ' + error.message, 'danger');
+                    });
+                }
+            }
+        });
+
+        // Delete Server functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.delete-server')) {
+                const button = e.target.closest('.delete-server');
+                const serverId = button.getAttribute('data-server-id');
+                
+                if (confirm('Are you sure you want to delete this server? This action cannot be undone.')) {
+                    const formData = new FormData();
+                    formData.append('ajax_action', 'delete_server');
+                    formData.append('server_id', serverId);
+
+                    fetch(window.location.href, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            showMessage(data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Error deleting server: ' + error.message, 'danger');
+                    });
+                }
+            }
+        });
+
+        // Delete User functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.delete-user')) {
+                const button = e.target.closest('.delete-user');
+                const userId = button.getAttribute('data-user-id');
+                const username = button.getAttribute('data-username');
+                
+                if (confirm(`Are you sure you want to delete user "${username}"? This action cannot be undone.`)) {
+                    const formData = new FormData();
+                    formData.append('ajax_action', 'delete_user');
+                    formData.append('user_id', userId);
+
+                    fetch(window.location.href, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage(data.message, 'success');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            showMessage(data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Error deleting user: ' + error.message, 'danger');
+                    });
+                }
+            }
+        });
+
+        // Toggle Tool Status functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.toggle-tool-status')) {
+                const button = e.target.closest('.toggle-tool-status');
+                const toolId = button.getAttribute('data-tool-id');
+                const currentStatus = button.getAttribute('data-current-status');
+                const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+                
+                const formData = new FormData();
+                formData.append('ajax_action', 'toggle_tool_status');
+                formData.append('tool_id', toolId);
+                formData.append('new_status', newStatus);
+
+                fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage(data.message, 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        showMessage(data.message, 'danger');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error updating tool status: ' + error.message, 'danger');
+                });
+            }
+        });
+
+        // Toggle Server Status functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.toggle-server-status')) {
+                const button = e.target.closest('.toggle-server-status');
+                const serverId = button.getAttribute('data-server-id');
+                const currentStatus = button.getAttribute('data-current-status');
+                const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+                
+                const formData = new FormData();
+                formData.append('ajax_action', 'toggle_server_status');
+                formData.append('server_id', serverId);
+                formData.append('new_status', newStatus);
+
+                fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage(data.message, 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        showMessage(data.message, 'danger');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error updating server status: ' + error.message, 'danger');
+                });
+            }
+        });
+
+        // Reset forms when modals are closed
+        document.getElementById('addServerModal').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('addServerForm').reset();
+        });
+
+        document.getElementById('addUserModal').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('addUserForm').reset();
         });
     </script>
 </body>

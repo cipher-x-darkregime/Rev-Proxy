@@ -32,4 +32,16 @@ function getDBConnection() {
     } catch(PDOException $e) {
         die("Connection failed: " . $e->getMessage());
     }
+}
+
+// Helper function to log activities
+function logActivity($user_id, $action, $details = null) {
+    try {
+        $conn = getDBConnection();
+        $stmt = $conn->prepare('INSERT INTO activity_logs (user_id, action, details, ip_address) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$user_id, $action, $details, $_SERVER['REMOTE_ADDR'] ?? 'unknown']);
+    } catch (Exception $e) {
+        // Silently fail if logging fails
+        error_log("Failed to log activity: " . $e->getMessage());
+    }
 } 

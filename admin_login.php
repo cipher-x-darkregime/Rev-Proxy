@@ -28,6 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?');
             $stmt->execute([$user['id']]);
             
+            // Log the login activity
+            logActivity($user['id'], 'Login', 'Successful admin login');
+            
             header('Location: admin.php');
             exit();
         } else {
