@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config.php';
+require_once 'config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
@@ -43,7 +43,7 @@ $available_tools = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="container">
             <a class="navbar-brand" href="#">Reverse Proxy</a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="../users/logout.php">Logout</a>
+                <a class="nav-link" href="logout.php">Logout</a>
             </div>
         </div>
     </nav>

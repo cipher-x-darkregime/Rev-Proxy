@@ -4,18 +4,15 @@ define('SECURE_SESSION', true);
 define('SESSION_LIFETIME', 3600); // 1 hour
 define('COOKIE_LIFETIME', 86400); // 24 hours
 
-// Only set session ini settings and start session if not already active
-if (session_status() === PHP_SESSION_NONE) {
-    if (SECURE_SESSION) {
-        ini_set('session.cookie_httponly', 1);
-        ini_set('session.use_only_cookies', 1);
-        ini_set('session.cookie_secure', 1);
-        ini_set('session.cookie_samesite', 'Strict');
-        ini_set('session.gc_maxlifetime', SESSION_LIFETIME);
-    }
-    
-    session_start();
+if (SECURE_SESSION) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_only_cookies', 1);
+    ini_set('session.cookie_secure', 1);
+    ini_set('session.cookie_samesite', 'Strict');
+    ini_set('session.gc_maxlifetime', SESSION_LIFETIME);
 }
+
+session_start();
 
 define('DB_HOST', 'localhost'); // Use just 'localhost'
 define('DB_USER', 'root');

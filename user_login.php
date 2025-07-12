@@ -1,15 +1,15 @@
 <?php
-require_once __DIR__ . '/../core/config.php';
+require_once 'config.php';
 
 if (isset($_SESSION['user_id']) && $_SESSION['user_type'] === 'user') {
-    header('Location: ../core/rev.php');
+    header('Location: rev.php');
     exit();
 }
 
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = htmlspecialchars(trim($_POST['username'] ?? ''), ENT_QUOTES, 'UTF-8');
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
 
     if (empty($username) || empty($password)) {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Log the login activity
             logActivity($user['id'], 'Login', 'Successful user login');
             
-            header('Location: ../core/rev.php');
+            header('Location: rev.php');
             exit();
         } else {
             $error = 'Invalid username or password';
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
             <div class="text-center mt-3">
-                <a href="../admin/admin_login.php" class="text-decoration-none">Admin Login</a>
+                <a href="admin_login.php" class="text-decoration-none">Admin Login</a>
             </div>
         </div>
     </div>
